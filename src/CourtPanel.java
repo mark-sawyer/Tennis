@@ -2,30 +2,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class CourtPanel extends JPanel implements ActionListener {
     private final int WIDTH = 500;
-    private final int HEIGHT = 450;
+    private final int HEIGHT = 600;
+    private ImageIcon background;
     private Player playerA;
     private Player playerB;
     private Ball ball;
-    private Timer timer;
-    private double playerADist;
-    private double playerBDist;
 
     public CourtPanel(Player playerA, Player playerB, Ball ball) {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.GRAY);
+//        setBackground(Color.GRAY);
         this.playerA = playerA;
         this.playerB = playerB;
         this.ball = ball;
-        timer = new Timer(30, this);
+
+        background = new ImageIcon(this.getClass().getResource("court.png"));
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        background.paintIcon(this, g, 0, 0);
         playerA.draw(g);
         playerB.draw(g);
         ball.draw(g);

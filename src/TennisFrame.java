@@ -36,8 +36,8 @@ public class TennisFrame extends JFrame implements ActionListener {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        add(scorePanel, BorderLayout.SOUTH);
-        add(courtPanel, BorderLayout.NORTH);
+        add(scorePanel, BorderLayout.WEST);
+        add(courtPanel, BorderLayout.EAST);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -75,7 +75,7 @@ public class TennisFrame extends JFrame implements ActionListener {
 
     public void game() {
         playerA.setPosition(100, 100);
-        playerB.setPosition(400, 350);
+        playerB.setPosition(400, 500);
         ball.setPosition();
         timer.start();
     }

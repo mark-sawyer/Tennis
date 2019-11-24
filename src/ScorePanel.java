@@ -1,12 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class ScorePanel extends JPanel {
-    private final int WIDTH = 500;
-    private final int HEIGHT = 150;
+    private final int WIDTH = 200;
+    private final int HEIGHT = 600;
     private JButton play;
     private JLabel scoreA;
     private JLabel scoreB;

@@ -15,7 +15,7 @@ public class Ball {
 
     public void setPosition() {
         x = random.nextInt(501);
-        y = random.nextInt(451);
+        y = random.nextInt(601);
     }
 
     public double getX() {
