@@ -2,26 +2,57 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Match extends JPanel implements ActionListener {
     private final int WIDTH = 500;
     private final int HEIGHT = 500;
     private JButton play;
-
-    private Player[] players;
+    private JLabel scoreA;
+    private JLabel scoreB;
+    private Player playerA;
+    private Player playerB;
+    private Random random;
 
 
     public Match() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        players = new Player[] {new Player(PlayerName.PLAYER_A), new Player(PlayerName.PLAYER_B)};
+        setLayout(new BorderLayout());
+
+        playerA = new Player(PlayerName.PLAYER_A);
+        playerB = new Player(PlayerName.PLAYER_B);
+        playerA.setOpponent(playerB);
+        playerB.setOpponent(playerA);
+
         play = new JButton("Play");
         play.addActionListener(this);
-        setLayout(new BorderLayout());
         add(play, BorderLayout.SOUTH);
+
+        scoreA = new JLabel(playerA.toString());
+        add(scoreA, BorderLayout.WEST);
+        scoreB = new JLabel(playerB.toString());
+        add(scoreB, BorderLayout.EAST);
+
+        random = new Random();
+    }
+
+    public void set() {
+        if (playerA.getSetsWonInMatch() == 3 || playerB.getSetsWonInMatch() == 3) {
+            System.out.println("game over");
+        }
+        else {
+            if (random.nextBoolean()) {
+                playerA.winSet();
+                scoreA.setText(playerA.toString());
+            } else {
+                playerB.winSet();
+                scoreB.setText(playerB.toString());
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("play");
+        set();
     }
 }
