@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Player {
     private GamePoint gamePoint;
     private int gamesWonInSet;
@@ -6,13 +8,16 @@ public class Player {
     private boolean isServing;
     private boolean isTiebreak;
     private Player opponent;
+    private Color colour;
+    private int x;
+    private int y;
 
-    public Player() {
+    public Player(boolean servingFirst, Color colour) {
         gamePoint = GamePoint.LOVE;
-    }
-
-    public void setIsServing(boolean b) {
-        isServing = b;
+        isServing = servingFirst;
+        this.colour = colour;
+        x = 200;
+        y = 200;
     }
 
     public void setOpponent(Player opponent) {
@@ -44,6 +49,8 @@ public class Player {
     public void winGame() {
         ++gamesWonInSet;
         resetPoints();
+        changeServe();
+        opponent.changeServe();
     }
 
     public void winPoint() {
@@ -113,6 +120,15 @@ public class Player {
 
     public boolean getIsTiebreak() {
         return isTiebreak;
+    }
+
+    public void changeServe() {
+        isServing = !isServing;
+    }
+
+    public void draw(Graphics g) {
+        g.setColor(colour);
+        g.fillOval(x - 15, y - 15, 30, 30);
     }
 
     @Override
