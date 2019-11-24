@@ -46,26 +46,44 @@ public class Match extends JPanel implements ActionListener {
     }
 
     public void set() {
+        if (playerA.getIsTiebreak()) {
+            tiebreak();
+        }
+        else {
+            game();
+            int playerAGames = playerA.getGamesWonInSet();
+            int playerBGames = playerB.getGamesWonInSet();
+            if (playerAGames >= 6 && playerBGames <= playerAGames - 2) {
+                playerA.winSet();
+                playerB.resetGames();
+                playerB.resetPoints();
+            }
+            else if (playerBGames >= 6 && playerAGames <= playerBGames - 2) {
+                playerB.winSet();
+                playerA.resetGames();
+                playerA.resetPoints();
+            }
+            else if (playerAGames == 6 && playerBGames == 6 &&
+                    playerA.getSetsWonInMatch() + playerB.getSetsWonInMatch() < 4) {
+                playerA.setIsTiebreak(true);
+                playerB.setIsTiebreak(true);
+            }
+        }
+    }
+
+    public void game() {
         if (random.nextBoolean()) {
-            playerA.winGame();
-            playerB.resetPoints();
-
+            playerA.winPoint();
         } else {
-            playerB.winGame();
-            playerA.resetPoints();
+            playerB.winPoint();
         }
+    }
 
-        int playerAGames = playerA.getGamesWonInSet();
-        int playerBGames = playerB.getGamesWonInSet();
-        if (playerAGames >= 6 && playerBGames <= playerAGames - 2) {
-            playerA.winSet();
-            playerB.resetGames();
-            playerB.resetPoints();
-        }
-        else if (playerBGames >= 6 && playerAGames <= playerBGames - 2) {
-            playerB.winSet();
-            playerA.resetGames();
-            playerA.resetPoints();
+    public void tiebreak() {
+        if (random.nextBoolean()) {
+            playerA.winTiebreakPoint();
+        } else {
+            playerB.winTiebreakPoint();
         }
     }
 
