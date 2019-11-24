@@ -1,5 +1,4 @@
 public class Player {
-    private PlayerName name;
     private GamePoint gamePoint;
     private int gamesWonInSet;
     private int setsWonInMatch;
@@ -8,8 +7,7 @@ public class Player {
     private boolean isTiebreak;
     private Player opponent;
 
-    public Player(PlayerName name) {
-        this.name = name;
+    public Player() {
         gamePoint = GamePoint.LOVE;
     }
 

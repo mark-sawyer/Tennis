@@ -1,38 +1,22 @@
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class Match extends JPanel implements ActionListener {
-    private final int WIDTH = 500;
-    private final int HEIGHT = 500;
-    private JButton play;
-    private JLabel scoreA;
-    private JLabel scoreB;
+public class Score implements ActionListener {
     private Player playerA;
     private Player playerB;
+    private ScorePanel scorePanel;
+    private CourtPanel courtPanel;
     private Random random;
 
-
-    public Match() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setLayout(new BorderLayout());
-
-        playerA = new Player(PlayerName.PLAYER_A);
-        playerB = new Player(PlayerName.PLAYER_B);
+    public Score(ScorePanel scorePanel, CourtPanel courtPanel) {
+        this.scorePanel = scorePanel;
+        this.courtPanel = courtPanel;
+        scorePanel.getPlay().addActionListener(this);
+        playerA = new Player();
+        playerB = new Player();
         playerA.setOpponent(playerB);
         playerB.setOpponent(playerA);
-
-        play = new JButton("Play");
-        play.addActionListener(this);
-        add(play, BorderLayout.SOUTH);
-
-        scoreA = new JLabel(playerA.toString());
-        add(scoreA, BorderLayout.WEST);
-        scoreB = new JLabel(playerB.toString());
-        add(scoreB, BorderLayout.EAST);
-
         random = new Random();
     }
 
@@ -90,7 +74,7 @@ public class Match extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         match();
-        scoreA.setText(playerA.toString());
-        scoreB.setText(playerB.toString());
+        scorePanel.getScoreA().setText(playerA.toString());
+        scorePanel.getScoreB().setText(playerB.toString());
     }
 }
