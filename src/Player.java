@@ -31,6 +31,21 @@ public class Player {
 
     public void winSet() {
         ++setsWonInMatch;
+        resetPoints();
+        resetGames();
+    }
+
+    public void winGame() {
+        ++ gamesWonInSet;
+        resetPoints();
+    }
+
+    public void resetPoints() {
+        gamePoint = GamePoint.LOVE;
+    }
+
+    public void resetGames() {
+        gamesWonInSet = 0;
     }
 
     @Override

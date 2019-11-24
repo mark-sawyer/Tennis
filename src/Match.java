@@ -36,23 +36,43 @@ public class Match extends JPanel implements ActionListener {
         random = new Random();
     }
 
-    public void set() {
+    public void match() {
         if (playerA.getSetsWonInMatch() == 3 || playerB.getSetsWonInMatch() == 3) {
             System.out.println("game over");
         }
         else {
-            if (random.nextBoolean()) {
-                playerA.winSet();
-                scoreA.setText(playerA.toString());
-            } else {
-                playerB.winSet();
-                scoreB.setText(playerB.toString());
-            }
+            set();
+        }
+    }
+
+    public void set() {
+        if (random.nextBoolean()) {
+            playerA.winGame();
+            playerB.resetPoints();
+
+        } else {
+            playerB.winGame();
+            playerA.resetPoints();
+        }
+
+        int playerAGames = playerA.getGamesWonInSet();
+        int playerBGames = playerB.getGamesWonInSet();
+        if (playerAGames >= 6 && playerBGames <= playerAGames - 2) {
+            playerA.winSet();
+            playerB.resetGames();
+            playerB.resetPoints();
+        }
+        else if (playerBGames >= 6 && playerAGames <= playerBGames - 2) {
+            playerB.winSet();
+            playerA.resetGames();
+            playerA.resetPoints();
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        set();
+        match();
+        scoreA.setText(playerA.toString());
+        scoreB.setText(playerB.toString());
     }
 }
