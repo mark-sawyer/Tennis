@@ -11,8 +11,6 @@ public class ScorePanel extends JPanel {
     private JLabel scoreA;
     private JLabel scoreB;
 
-
-
     public ScorePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new BorderLayout());

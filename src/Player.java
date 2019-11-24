@@ -9,15 +9,17 @@ public class Player {
     private boolean isTiebreak;
     private Player opponent;
     private Color colour;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
+    private Ball ball;
+    private double speed;
 
-    public Player(boolean servingFirst, Color colour) {
+    public Player(boolean servingFirst, Color colour, Ball ball) {
         gamePoint = GamePoint.LOVE;
         isServing = servingFirst;
         this.colour = colour;
-        x = 200;
-        y = 200;
+        this.ball = ball;
+        speed = 5;
     }
 
     public void setOpponent(Player opponent) {
@@ -126,9 +128,35 @@ public class Player {
         isServing = !isServing;
     }
 
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void draw(Graphics g) {
         g.setColor(colour);
-        g.fillOval(x - 15, y - 15, 30, 30);
+        int xPos = (int) Math.rint(x);
+        int yPos = (int) Math.rint(y);
+        g.fillOval(xPos - 15, yPos - 15, 30, 30);
+    }
+
+    public void moveToLocation(double xLoc, double yLoc) {
+        double xDist = xLoc - x;
+        double yDist = yLoc - y;
+        double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        double xSpeed = (xDist / norm) * speed;
+        double ySpeed = (yDist / norm) * speed;
+
+        x += xSpeed;
+        y += ySpeed;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 
     @Override
