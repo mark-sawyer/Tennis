@@ -13,7 +13,6 @@ public class CourtPanel extends JPanel implements ActionListener {
 
     public CourtPanel(Player playerA, Player playerB, Ball ball) {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-//        setBackground(Color.GRAY);
         this.playerA = playerA;
         this.playerB = playerB;
         this.ball = ball;

@@ -6,6 +6,7 @@ public class Ball {
     private double y;
     private double height;
     private double heightVelocity;
+    int bounceNum;
     private final double velocityLostPerStep = 0.0045;
     private Random random;
     private Color colour;
@@ -21,6 +22,7 @@ public class Ball {
         y = random.nextInt(601);
         height = 10;
         heightVelocity = 0;
+        bounceNum = 0;
     }
 
     public double getX() {
@@ -31,22 +33,18 @@ public class Ball {
         return y;
     }
 
-    public double getHeight() {
-        return height;
-    }
-
     public void dropHeight() {
         height += heightVelocity;
         if (height < 0) {
+            ++bounceNum;
             height = Math.abs(height);
             heightVelocity = Math.abs(heightVelocity) * 0.8;
         }
         heightVelocity -= velocityLostPerStep;
-        System.out.println(height);
     }
 
-    public double getHeightVelocity() {
-        return heightVelocity;
+    public int getBounceNum() {
+        return bounceNum;
     }
 
     public void draw(Graphics g) {

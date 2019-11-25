@@ -93,30 +93,51 @@ public class TennisFrame extends JFrame implements ActionListener {
             playerB.moveToLocation(ball.getX(), ball.getY());
             ball.dropHeight();
 
-            double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
-                    Math.pow(playerA.getY() - ball.getY(), 2));
-            double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
-                    Math.pow(playerB.getY() - ball.getY(), 2));
-
             boolean isTiebreak = playerA.getIsTiebreak();
+            boolean playerAServing = playerA.getIsServing();
 
-            if (playerADist < 20 && playerADist < playerBDist) {
+            int bounceNum = ball.getBounceNum();
+            if (bounceNum == 2) {
                 timer.stop();
                 if (isTiebreak) {
-                    playerA.winTiebreakPoint();
+                    if (playerAServing) {
+                        playerA.winTiebreakPoint();
+                    } else {
+                        playerB.winTiebreakPoint();
+                    }
                 } else {
-                    playerA.winPoint();
+                    if (playerAServing) {
+                        playerA.winPoint();
+                    } else {
+                        playerB.winPoint();
+                    }
                 }
+            }
 
-            }
-            if (playerBDist < 20 && playerBDist < playerADist) {
-                timer.stop();
-                if (isTiebreak) {
-                    playerB.winTiebreakPoint();
-                } else {
-                    playerB.winPoint();
+            else {
+                double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
+                        Math.pow(playerA.getY() - ball.getY(), 2));
+                double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
+                        Math.pow(playerB.getY() - ball.getY(), 2));
+
+                if (playerADist < 20 && playerADist < playerBDist) {
+                    timer.stop();
+                    if (isTiebreak) {
+                        playerA.winTiebreakPoint();
+                    } else {
+                        playerA.winPoint();
+                    }
+
+                } else if (playerBDist < 20 && playerBDist < playerADist) {
+                    timer.stop();
+                    if (isTiebreak) {
+                        playerB.winTiebreakPoint();
+                    } else {
+                        playerB.winPoint();
+                    }
                 }
             }
+
             courtPanel.repaint();
             courtPanel.invalidate();
             courtPanel.validate();

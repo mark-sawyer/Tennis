@@ -19,7 +19,7 @@ public class Player {
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
-        speed = 0.0000000001;
+        speed = 3;
     }
 
     public void setOpponent(Player opponent) {
@@ -126,6 +126,10 @@ public class Player {
 
     public void changeServe() {
         isServing = !isServing;
+    }
+
+    public boolean getIsServing() {
+        return isServing;
     }
 
     public void setPosition(int x, int y) {
