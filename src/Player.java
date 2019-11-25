@@ -19,7 +19,7 @@ public class Player {
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
-        speed = 5;
+        speed = 0.0000000001;
     }
 
     public void setOpponent(Player opponent) {

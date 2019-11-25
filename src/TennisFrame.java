@@ -32,7 +32,7 @@ public class TennisFrame extends JFrame implements ActionListener {
 
         courtPanel = new CourtPanel(playerA, playerB, ball);
 
-        timer = new Timer(5, this);
+        timer = new Timer(30, this);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -91,6 +91,7 @@ public class TennisFrame extends JFrame implements ActionListener {
         else if (e.getSource() == timer) {
             playerA.moveToLocation(ball.getX(), ball.getY());
             playerB.moveToLocation(ball.getX(), ball.getY());
+            ball.dropHeight();
 
             double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
                     Math.pow(playerA.getY() - ball.getY(), 2));
