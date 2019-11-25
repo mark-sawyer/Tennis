@@ -21,18 +21,18 @@ public class TennisFrame extends JFrame implements ActionListener {
         ball = new Ball();
         Random random = new Random();
         if (random.nextBoolean()) {
-            playerA = new Player(true, Color.RED, ball);
-            playerB = new Player(false, Color.BLUE, ball);
+            playerA = new Player(true, Color.RED, ball, Side.NORTH);
+            playerB = new Player(false, Color.BLUE, ball, Side.SOUTH);
         } else {
-            playerA = new Player(false, Color.RED, ball);
-            playerB = new Player(true, Color.BLUE, ball);
+            playerA = new Player(false, Color.RED, ball, Side.NORTH);
+            playerB = new Player(true, Color.BLUE, ball, Side.SOUTH);
         }
         playerA.setOpponent(playerB);
         playerB.setOpponent(playerA);
 
         courtPanel = new CourtPanel(playerA, playerB, ball);
 
-        timer = new Timer(30, this);
+        timer = new Timer(5, this);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -54,29 +54,17 @@ public class TennisFrame extends JFrame implements ActionListener {
 
     public void set() {
         game();
-        int playerAGames = playerA.getGamesWonInSet();
-        int playerBGames = playerB.getGamesWonInSet();
-        if (playerAGames >= 6 && playerBGames <= playerAGames - 2) {
-            playerA.winSet();
-            playerB.resetGames();
-            playerB.resetPoints();
-        }
-        else if (playerBGames >= 6 && playerAGames <= playerBGames - 2) {
-            playerB.winSet();
-            playerA.resetGames();
-            playerA.resetPoints();
-        }
-        else if (playerAGames == 6 && playerBGames == 6 &&
-                playerA.getSetsWonInMatch() + playerB.getSetsWonInMatch() < 4) {
-            playerA.setIsTiebreak(true);
-            playerB.setIsTiebreak(true);
-        }
     }
 
     public void game() {
         playerA.setPosition(100, 100);
         playerB.setPosition(400, 500);
         ball.setPosition();
+        if (playerA.getIsServing()) {
+            System.out.println("A serving");
+        } else {
+            System.out.println("B serving");
+        }
         timer.start();
     }
 

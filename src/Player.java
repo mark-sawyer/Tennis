@@ -7,19 +7,23 @@ public class Player {
     private int pointsWonInTiebreak;
     private boolean isServing;
     private boolean isTiebreak;
+    private boolean servedFirstInTiebreak;
     private Player opponent;
     private Color colour;
     private double x;
     private double y;
     private Ball ball;
     private double speed;
+    private Side side;
 
-    public Player(boolean servingFirst, Color colour, Ball ball) {
-        gamePoint = GamePoint.LOVE;
+    public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
+        gamePoint = GamePoint.FORTY;
+        gamesWonInSet = 5;
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
-        speed = 3;
+        this.side = side;
+        speed = 5;
     }
 
     public void setOpponent(Player opponent) {
@@ -30,29 +34,58 @@ public class Player {
         return setsWonInMatch;
     }
 
-    public int getGamesWonInSet() {
-        return gamesWonInSet;
-    }
-
     public GamePoint getPointsWonInGame() {
         return gamePoint;
-    }
-
-    public int getPointsWonInTiebreak() {
-        return pointsWonInTiebreak;
     }
 
     public void winSet() {
         ++setsWonInMatch;
         resetPoints();
         resetGames();
+        swapSides();
     }
 
     public void winGame() {
         ++gamesWonInSet;
         resetPoints();
-        changeServe();
-        opponent.changeServe();
+        swapServe();
+
+        if (gamesWonInSet >= 6 && opponent.gamesWonInSet <= gamesWonInSet - 2) {
+            winSet();
+        }
+        else if (gamesWonInSet == 6 && opponent.gamesWonInSet == 6 &&
+                setsWonInMatch + opponent.setsWonInMatch < 4) {
+            isTiebreak = true;
+            opponent.isTiebreak = true;
+            if (isServing) {
+                servedFirstInTiebreak = true;
+                opponent.servedFirstInTiebreak = false;
+            } else {
+                servedFirstInTiebreak = false;
+                opponent.servedFirstInTiebreak = true;
+            }
+        }
+        else if ((gamesWonInSet + opponent.gamesWonInSet) % 2 == 1) {
+            swapSides();
+        }
+    }
+
+    public void swapSides() {
+        switch (side) {
+            case NORTH:
+                side = Side.SOUTH;
+                opponent.side = Side.NORTH;
+                break;
+            case SOUTH:
+                side = Side.NORTH;
+                opponent.side = Side.SOUTH;
+                break;
+        }
+    }
+
+    public void swapServe() {
+        isServing = !isServing;
+        opponent.isServing = !opponent.isServing;
     }
 
     public void winPoint() {
@@ -72,60 +105,56 @@ public class Player {
                         opponentPoints == GamePoint.FIFTEEN ||
                         opponentPoints == GamePoint.THIRTY) {
                     winGame();
-                    opponent.resetPoints();
                 }
                 else if (opponentPoints == GamePoint.FORTY) {
                     gamePoint = GamePoint.AD;
                 }
                 else if (opponentPoints == GamePoint.AD) {
-                    opponent.backToForty();
+                    opponent.gamePoint = GamePoint.FORTY;
                 }
                 break;
             case AD:
                 winGame();
-                opponent.resetPoints();
         }
     }
 
     public void winTiebreakPoint() {
         ++pointsWonInTiebreak;
-        int opponentPoints = opponent.getPointsWonInTiebreak();
-        if (pointsWonInTiebreak >= 7 && opponentPoints <= pointsWonInTiebreak - 2) {
+        if (pointsWonInTiebreak >= 7 && opponent.pointsWonInTiebreak <= pointsWonInTiebreak - 2) {
             winSet();
-            pointsWonInTiebreak = 0;
-            isTiebreak = false;
-            opponent.setIsTiebreak(false);
-            opponent.resetPointsWonInTiebreak();
-            opponent.resetGames();
+            endTiebreak();
+            swapSides();
+            if (isServing && servedFirstInTiebreak) {
+                swapServe();
+            }
+        }
+        else if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 1) {
+            swapServe();
+        }
+        else if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 6 == 0) {
+            swapSides();
         }
     }
 
     public void resetPoints() {
         gamePoint = GamePoint.LOVE;
-    }
-
-    public void resetPointsWonInTiebreak() {
-        pointsWonInTiebreak = 0;
-    }
-
-    public void backToForty() {
-        gamePoint = GamePoint.FORTY;
+        opponent.gamePoint = GamePoint.LOVE;
     }
 
     public void resetGames() {
         gamesWonInSet = 0;
+        opponent.gamesWonInSet = 0;
     }
 
-    public void setIsTiebreak(boolean b) {
-        isTiebreak = b;
+    public void endTiebreak() {
+        pointsWonInTiebreak = 0;
+        opponent.pointsWonInTiebreak = 0;
+        isTiebreak = false;
+        opponent.isTiebreak = false;
     }
 
     public boolean getIsTiebreak() {
         return isTiebreak;
-    }
-
-    public void changeServe() {
-        isServing = !isServing;
     }
 
     public boolean getIsServing() {

@@ -16,7 +16,6 @@ public class CourtPanel extends JPanel implements ActionListener {
         this.playerA = playerA;
         this.playerB = playerB;
         this.ball = ball;
-
         background = new ImageIcon(this.getClass().getResource("court.png"));
     }
 
