@@ -3,18 +3,12 @@ import java.util.Random;
 
 public class Player implements PositionConstants {
     private GamePoint gamePoint;
-    private int gamesWonInSet;
-    private int setsWonInMatch;
-    private int pointsWonInTiebreak;
-    private boolean isServing;
-    private boolean isTiebreak;
-    private boolean servedFirstInTiebreak;
+    private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
+    private boolean isServing, isTiebreak, servedFirstInTiebreak, isTurnToHit;
+    private double x, y, speed;
     private Player opponent;
     private Color colour;
-    private double x;
-    private double y;
     private Ball ball;
-    private double speed;
     private Side side;
     private Random random;
 
@@ -156,12 +150,20 @@ public class Player implements PositionConstants {
         opponent.isTiebreak = false;
     }
 
+    public Side getSide() {
+        return side;
+    }
+
     public boolean getIsTiebreak() {
         return isTiebreak;
     }
 
     public boolean getIsServing() {
         return isServing;
+    }
+
+    public boolean getIsTurnToHit() {
+        return isTurnToHit;
     }
 
     public void setPosition() {
@@ -185,17 +187,21 @@ public class Player implements PositionConstants {
                 if (isServing) {
                     x = NORTH_SERVE_DEUCE_X;
                     y = NORTH_SERVE_DEUCE_Y;
+                    ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
                 } else {
                     x = NORTH_RECEIVE_DEUCE_X;
                     y = NORTH_RECEIVE_DEUCE_Y;
+                    ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
                 }
             } else {
                 if (isServing) {
                     x = NORTH_SERVE_AD_X;
                     y = NORTH_SERVE_AD_Y;
+                    ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
                 } else {
                     x = NORTH_RECEIVE_AD_X;
                     y = NORTH_RECEIVE_AD_Y;
+                    ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
                 }
             }
         }
@@ -204,17 +210,21 @@ public class Player implements PositionConstants {
                 if (isServing) {
                     x = SOUTH_SERVE_DEUCE_X;
                     y = SOUTH_SERVE_DEUCE_Y;
+                    ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
                 } else {
                     x = SOUTH_RECEIVE_DEUCE_X;
                     y = SOUTH_RECEIVE_DEUCE_Y;
+                    ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
                 }
             } else {
                 if (isServing) {
                     x = SOUTH_SERVE_AD_X;
                     y = SOUTH_SERVE_AD_Y;
+                    ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
                 } else {
                     x = SOUTH_RECEIVE_AD_X;
                     y = SOUTH_RECEIVE_AD_Y;
+                    ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
                 }
             }
         }
@@ -230,13 +240,19 @@ public class Player implements PositionConstants {
             yTarget = random.nextInt(67) + 74;
         }
 
+        double heightVelocity = ((double) random.nextInt(300)) / 1000;
+        ball.setHeightVelocity(heightVelocity);
+
         double xDist = xTarget - ball.getX();
         double yDist = yTarget - ball.getY();
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
         double xDir = xDist / norm;
         double yDir = yDist / norm;
-        ball.setSpeed(5);
+        ball.setSpeed(4);
         ball.setDirection(xDir, yDir);
+        ball.resetBounceNum();
+        isTurnToHit = false;
+        opponent.isTurnToHit = true;
     }
 
     public void draw(Graphics g) {
