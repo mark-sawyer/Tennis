@@ -33,7 +33,6 @@ public class Ball {
 
     public void dropHeight() {
         height += heightVelocity;
-        System.out.println(height);
         if (height < 0) {
             ++bounceNum;
             height = Math.abs(height);

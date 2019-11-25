@@ -11,6 +11,8 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
     private ScorePanel scorePanel;
     private CourtPanel courtPanel;
     private Timer timer;
+    private final double MAX_HITTABLE_BALL_HEIGHT = 5;
+    private final double MIN_HITTABLE_BALL_HEIGHT = 0.5;
 
     public TennisFrame(String s) {
         super(s);
@@ -72,123 +74,74 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         }
 
         else if (e.getSource() == timer) {
-            playerA.moveToLocation();
-            playerB.moveToLocation();
-            ball.dropHeight();
-            ball.move();
-
-            boolean isTiebreak = playerA.getIsTiebreak();
-            boolean playerAServing = playerA.getIsServing();
-
-            int bounceNum = ball.getBounceNum();
-            if (bounceNum == 2) {
-                timer.stop();
-                if (isTiebreak) {
-                    if (playerAServing) {
-                        playerA.winTiebreakPoint();
-                    } else {
-                        playerB.winTiebreakPoint();
-                    }
-                } else {
-                    if (playerAServing) {
-                        playerA.winPoint();
-                    } else {
-                        playerB.winPoint();
-                    }
-                }
-            }
-
-            else {
-                double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
-                        Math.pow(playerA.getY() - ball.getY(), 2));
-                double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
-                        Math.pow(playerB.getY() - ball.getY(), 2));
-
-                if (playerADist < 20 && playerADist < playerBDist) {
-//                    timer.stop();
-                    if (isTiebreak) {
-                        playerA.winTiebreakPoint();
-                    } else {
-                        if (ball.getHeight() < 5) {
-                            playerA.hitBall();
-                        }
-                    }
-
-                } else if (playerBDist < 20 && playerBDist < playerADist) {
-//                    timer.stop();
-                    if (isTiebreak) {
-                        playerB.winTiebreakPoint();
-                    } else {
-                        if (ball.getHeight() < 10) {
-                            playerB.hitBall();
-                        }
-                    }
-                }
-            }
-
-            courtPanel.repaint();
-            courtPanel.invalidate();
-            courtPanel.validate();
+            doAFrame();
         }
 
         else if (e.getSource() == scorePanel.getPlayFrame()) {
-            playerA.moveToLocation();
-            playerB.moveToLocation();
-            ball.dropHeight();
-            ball.move();
-
-            boolean isTiebreak = playerA.getIsTiebreak();
-            boolean playerAServing = playerA.getIsServing();
-
-            int bounceNum = ball.getBounceNum();
-            if (bounceNum == 2) {
-                timer.stop();
-                if (isTiebreak) {
-                    if (playerAServing) {
-                        playerA.winTiebreakPoint();
-                    } else {
-                        playerB.winTiebreakPoint();
-                    }
-                } else {
-                    if (playerAServing) {
-                        playerA.winPoint();
-                    } else {
-                        playerB.winPoint();
-                    }
-                }
-            }
-
-            else {
-                double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
-                        Math.pow(playerA.getY() - ball.getY(), 2));
-                double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
-                        Math.pow(playerB.getY() - ball.getY(), 2));
-
-                if (playerADist < 20 && playerADist < playerBDist) {
-//                    timer.stop();
-                    if (isTiebreak) {
-                        playerA.winTiebreakPoint();
-                    } else {
-                        if (ball.getHeight() < 5) {
-                            playerA.hitBall();
-                        }
-                    }
-
-                } else if (playerBDist < 20 && playerBDist < playerADist) {
-//                    timer.stop();
-                    if (isTiebreak) {
-                        playerB.winTiebreakPoint();
-                    } else {
-                        if (ball.getHeight() < 5) {
-                            playerB.hitBall();
-                        }
-                    }
-                }
-            }
-
-            courtPanel.repaint();
-            courtPanel.invalidate();
-            courtPanel.validate();
+            timer.stop();
+            doAFrame();
         }
+    }
+
+    private void doAFrame() {
+        playerA.moveToLocation();
+        playerB.moveToLocation();
+        ball.dropHeight();
+        ball.move();
+
+        boolean isTiebreak = playerA.getIsTiebreak();
+        boolean playerAServing = playerA.getIsServing();
+
+        int bounceNum = ball.getBounceNum();
+        if (bounceNum == 2) {
+            timer.stop();
+            if (isTiebreak) {
+                if (playerAServing) {
+                    playerA.winTiebreakPoint();
+                } else {
+                    playerB.winTiebreakPoint();
+                }
+            } else {
+                if (playerAServing) {
+                    playerA.winPoint();
+                } else {
+                    playerB.winPoint();
+                }
+            }
+        }
+
+        else {
+            double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
+                    Math.pow(playerA.getY() - ball.getY(), 2));
+            double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
+                    Math.pow(playerB.getY() - ball.getY(), 2));
+
+            if (playerADist < 20 && playerADist < playerBDist) {
+//                    timer.stop();
+                if (isTiebreak) {
+                    playerA.winTiebreakPoint();
+                } else {
+                    if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
+                            ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerA.getTurnToHitBall()) {
+                        playerA.hitBall();
+                    }
+                }
+
+            } else if (playerBDist < 20 && playerBDist < playerADist) {
+//                    timer.stop();
+                if (isTiebreak) {
+                    playerB.winTiebreakPoint();
+                } else {
+                    if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
+                            ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerB.getTurnToHitBall()) {
+                        playerB.hitBall();
+                    }
+                }
+            }
+        }
+
+        courtPanel.repaint();
+        courtPanel.invalidate();
+        courtPanel.validate();
     }
 }
