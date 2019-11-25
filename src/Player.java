@@ -4,7 +4,7 @@ import java.util.Random;
 public class Player implements PositionConstants {
     private GamePoint gamePoint;
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
-    private boolean isServing, isTiebreak, servedFirstInTiebreak, turnToHitBall;
+    private boolean isServing, isTiebreak, servedFirstInTiebreak, turnToHitBall, hasServed;
     private double x, y, speed, xGoal, yGoal;
     private Player opponent;
     private Color colour;
@@ -18,7 +18,7 @@ public class Player implements PositionConstants {
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 7;
+        speed = 2;
         random = new Random();
     }
 
@@ -162,23 +162,7 @@ public class Player implements PositionConstants {
     }
 
     public void setPosition() {
-        boolean isDeuceSide;
-        if (isTiebreak) {
-            if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0) {
-                isDeuceSide = true;
-            }
-            else {
-                isDeuceSide = false;
-            }
-        }
-        else {
-            if ((GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0) {
-                isDeuceSide = true;
-            }
-            else {
-                isDeuceSide = false;
-            }
-        }
+        boolean isDeuceSide = getIsDeuce();
 
         if (side == Side.NORTH) {
             if (isDeuceSide) {
@@ -250,29 +234,82 @@ public class Player implements PositionConstants {
 
         if (isServing) {
             turnToHitBall = true;
+            hasServed = false;
         } else {
             turnToHitBall = false;
         }
     }
 
+    private boolean getIsDeuce() {
+        boolean isDeuceSide;
+        if (isTiebreak) {
+            if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0) {
+                isDeuceSide = true;
+            }
+            else {
+                isDeuceSide = false;
+            }
+        }
+        else {
+            if ((GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0) {
+                isDeuceSide = true;
+            }
+            else {
+                isDeuceSide = false;
+            }
+        }
+        return isDeuceSide;
+    }
+
     public void hitBall() {
         turnToHitBall = false;
         opponent.turnToHitBall = true;
+
+        int xTarget;
         int yTarget;
-        if (side == Side.NORTH) {
-            yTarget = random.nextInt(Y_TARGET_RANGE) + SOUTH_Y_TARGET_LOWER_BOUND;
-        } else {
-            yTarget = random.nextInt(Y_TARGET_RANGE) + NORTH_Y_TARGET_LOWER_BOUND;
+        double yDist;
+        if (isServing && !hasServed) {
+            if (side == Side.NORTH) {
+                if (getIsDeuce()) {
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + SOUTH_DEUCE_X_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + SOUTH_Y_TARGET_LOWER_BOUND_SERVE;
+                }
+                else {
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + SOUTH_AD_X_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + SOUTH_Y_TARGET_LOWER_BOUND_SERVE;
+                }
+            }
+            else {
+                if (getIsDeuce()) {
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + NORTH_DEUCE_X_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + NORTH_Y_TARGET_LOWER_BOUND_SERVE;
+                }
+                else {
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + NORTH_AD_X_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + NORTH_Y_TARGET_LOWER_BOUND_SERVE;
+                }
+            }
+            yDist = yTarget - ball.getY();
+            hasServed = true;
         }
-        double yDist = yTarget - ball.getY();
-        int absYDist = (int) Math.abs(yDist);
-        int xTarget = (int) ball.getX() + (random.nextInt(absYDist) - (absYDist / 2));
-        if (xTarget < X_TARGET_LOWER_BOUND) {
-            xTarget = X_TARGET_LOWER_BOUND;
+        else {
+            if (side == Side.NORTH) {
+                yTarget = random.nextInt(Y_TARGET_RANGE) + SOUTH_Y_TARGET_LOWER_BOUND;
+            }
+            else {
+                yTarget = random.nextInt(Y_TARGET_RANGE) + NORTH_Y_TARGET_LOWER_BOUND;
+            }
+            yDist = yTarget - ball.getY();
+            int absYDist = (int) Math.abs(yDist);
+            xTarget = (int) ball.getX() + (random.nextInt(absYDist) - (absYDist / 2));
+            if (xTarget < X_TARGET_LOWER_BOUND) {
+                xTarget = X_TARGET_LOWER_BOUND;
+            }
+            else if (xTarget > X_TARGET_UPPER_BOUND) {
+                xTarget = X_TARGET_UPPER_BOUND;
+            }
         }
-        else if (xTarget > X_TARGET_UPPER_BOUND) {
-            xTarget = X_TARGET_UPPER_BOUND;
-        }
+
 
         System.out.println("xTarget: " + xTarget + " yTarget: " + yTarget);
 
@@ -311,7 +348,7 @@ public class Player implements PositionConstants {
         // Get the velocity when the ball hits the ground.
         double bounceVelocity = 0.8 * (-0.0045 * stepsToGround + heightVelocity);
         double stepsToMaxHeight = -bounceVelocity / 0.0045;
-
+        System.out.println("Steps to max height: " + stepsToMaxHeight);
         double maxBounceHeight = -0.00225 * Math.pow(stepsToMaxHeight, 2) +
                 bounceVelocity * stepsToMaxHeight;
         System.out.println("predicted max bounce height: " + maxBounceHeight);
