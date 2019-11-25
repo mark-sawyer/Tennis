@@ -6,8 +6,11 @@ public class Ball {
     private double y;
     private double height;
     private double heightVelocity;
-    int bounceNum;
+    private int bounceNum;
     private final double velocityLostPerStep = 0.0045;
+    private double speed;
+    private double xDir;
+    private double yDir;
     private Random random;
     private Color colour;
 
@@ -22,6 +25,7 @@ public class Ball {
         y = random.nextInt(601);
         height = 10;
         heightVelocity = 0;
+        speed = 0;
         bounceNum = 0;
     }
 
@@ -41,6 +45,20 @@ public class Ball {
             heightVelocity = Math.abs(heightVelocity) * 0.8;
         }
         heightVelocity -= velocityLostPerStep;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setDirection(double xDir, double yDir) {
+        this.xDir = xDir;
+        this.yDir = yDir;
+    }
+
+    public void move() {
+        x += xDir * speed;
+        y += yDir * speed;
     }
 
     public int getBounceNum() {

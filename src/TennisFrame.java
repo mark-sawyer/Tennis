@@ -80,6 +80,7 @@ public class TennisFrame extends JFrame implements ActionListener {
             playerA.moveToLocation(ball.getX(), ball.getY());
             playerB.moveToLocation(ball.getX(), ball.getY());
             ball.dropHeight();
+            ball.move();
 
             boolean isTiebreak = playerA.getIsTiebreak();
             boolean playerAServing = playerA.getIsServing();
@@ -109,19 +110,19 @@ public class TennisFrame extends JFrame implements ActionListener {
                         Math.pow(playerB.getY() - ball.getY(), 2));
 
                 if (playerADist < 20 && playerADist < playerBDist) {
-                    timer.stop();
+//                    timer.stop();
                     if (isTiebreak) {
                         playerA.winTiebreakPoint();
                     } else {
-                        playerA.winPoint();
+                        playerA.hitBall();
                     }
 
                 } else if (playerBDist < 20 && playerBDist < playerADist) {
-                    timer.stop();
+//                    timer.stop();
                     if (isTiebreak) {
                         playerB.winTiebreakPoint();
                     } else {
-                        playerB.winPoint();
+                        playerB.hitBall();
                     }
                 }
             }

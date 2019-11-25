@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Random;
 
 public class Player implements PositionConstants {
     private GamePoint gamePoint;
@@ -15,6 +16,7 @@ public class Player implements PositionConstants {
     private Ball ball;
     private double speed;
     private Side side;
+    private Random random;
 
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
         gamePoint = GamePoint.LOVE;
@@ -23,7 +25,8 @@ public class Player implements PositionConstants {
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 5;
+        speed = 2;
+        random = new Random();
     }
 
     public void setOpponent(Player opponent) {
@@ -215,6 +218,25 @@ public class Player implements PositionConstants {
                 }
             }
         }
+    }
+
+    public void hitBall() {
+        int xTarget = random.nextInt(221) + 141;
+        int yTarget;
+
+        if (side == Side.NORTH) {
+            yTarget = random.nextInt(67) + 458;
+        } else {
+            yTarget = random.nextInt(67) + 74;
+        }
+
+        double xDist = xTarget - ball.getX();
+        double yDist = yTarget - ball.getY();
+        double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        double xDir = xDist / norm;
+        double yDir = yDist / norm;
+        ball.setSpeed(5);
+        ball.setDirection(xDir, yDir);
     }
 
     public void draw(Graphics g) {
