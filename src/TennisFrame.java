@@ -57,8 +57,8 @@ public class TennisFrame extends JFrame implements ActionListener {
     }
 
     public void game() {
-        playerA.setPosition(100, 100);
-        playerB.setPosition(400, 500);
+        playerA.setPosition();
+        playerB.setPosition();
         ball.setPosition();
         if (playerA.getIsServing()) {
             System.out.println("A serving");

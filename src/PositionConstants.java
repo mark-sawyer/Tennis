@@ -1,0 +1,18 @@
+public interface PositionConstants {
+    int NORTH_SERVE_DEUCE_X = 131;
+    int NORTH_SERVE_DEUCE_Y = 29;
+    int NORTH_SERVE_AD_X = 368;
+    int NORTH_SERVE_AD_Y = 29;
+    int NORTH_RECEIVE_DEUCE_X = 143;
+    int NORTH_RECEIVE_DEUCE_Y = 61;
+    int NORTH_RECEIVE_AD_X = 356;
+    int NORTH_RECEIVE_AD_Y = 61;
+    int SOUTH_SERVE_DEUCE_X = 368;
+    int SOUTH_SERVE_DEUCE_Y = 570;
+    int SOUTH_SERVE_AD_X = 131;
+    int SOUTH_SERVE_AD_Y = 570;
+    int SOUTH_RECEIVE_DEUCE_X = 356;
+    int SOUTH_RECEIVE_DEUCE_Y = 538;
+    int SOUTH_RECEIVE_AD_X = 143;
+    int SOUTH_RECEIVE_AD_Y = 538;
+}

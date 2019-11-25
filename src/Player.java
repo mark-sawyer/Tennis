@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Player {
+public class Player implements PositionConstants {
     private GamePoint gamePoint;
     private int gamesWonInSet;
     private int setsWonInMatch;
@@ -17,7 +17,7 @@ public class Player {
     private Side side;
 
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
-        gamePoint = GamePoint.FORTY;
+        gamePoint = GamePoint.LOVE;
         gamesWonInSet = 5;
         isServing = servingFirst;
         this.colour = colour;
@@ -161,9 +161,60 @@ public class Player {
         return isServing;
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public void setPosition() {
+        boolean isDeuceSide;
+        if (isTiebreak) {
+            if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0) {
+                isDeuceSide = true;
+            } else {
+                isDeuceSide = false;
+            }
+        } else {
+            if ((GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0) {
+                isDeuceSide = true;
+            } else {
+                isDeuceSide = false;
+            }
+        }
+
+        if (side == Side.NORTH) {
+            if (isDeuceSide) {
+                if (isServing) {
+                    x = NORTH_SERVE_DEUCE_X;
+                    y = NORTH_SERVE_DEUCE_Y;
+                } else {
+                    x = NORTH_RECEIVE_DEUCE_X;
+                    y = NORTH_RECEIVE_DEUCE_Y;
+                }
+            } else {
+                if (isServing) {
+                    x = NORTH_SERVE_AD_X;
+                    y = NORTH_SERVE_AD_Y;
+                } else {
+                    x = NORTH_RECEIVE_AD_X;
+                    y = NORTH_RECEIVE_AD_Y;
+                }
+            }
+        }
+        else {
+            if (isDeuceSide) {
+                if (isServing) {
+                    x = SOUTH_SERVE_DEUCE_X;
+                    y = SOUTH_SERVE_DEUCE_Y;
+                } else {
+                    x = SOUTH_RECEIVE_DEUCE_X;
+                    y = SOUTH_RECEIVE_DEUCE_Y;
+                }
+            } else {
+                if (isServing) {
+                    x = SOUTH_SERVE_AD_X;
+                    y = SOUTH_SERVE_AD_Y;
+                } else {
+                    x = SOUTH_RECEIVE_AD_X;
+                    y = SOUTH_RECEIVE_AD_Y;
+                }
+            }
+        }
     }
 
     public void draw(Graphics g) {
