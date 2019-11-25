@@ -274,6 +274,16 @@ public class Player implements PositionConstants {
         ball.resetBounceNum();
         isTurnToHit = false;
         opponent.isTurnToHit = true;
+
+        // Change location goals
+        xGoal = NEUTRAL_X;
+        if (side == Side.NORTH) {
+            yGoal = NORTH_NEUTRAL_Y;
+        } else {
+            yGoal = SOUTH_NEUTRAL_Y;
+        }
+        opponent.xGoal = xTarget;
+        opponent.yGoal = yTarget;
     }
 
     public void draw(Graphics g) {
@@ -292,6 +302,11 @@ public class Player implements PositionConstants {
 
         x += xSpeed;
         y += ySpeed;
+    }
+
+    public void changeLocationGoal(double xGoal, double yGoal) {
+        this.xGoal = xGoal;
+        this.yGoal = yGoal;
     }
 
     public double getX() {

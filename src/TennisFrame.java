@@ -73,19 +73,19 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         else if (e.getSource() == timer) {
             if (playerA.getIsTurnToHit()) {
                 if (playerA.getSide() == Side.NORTH) {
-                    playerA.moveToLocation(ball.getX(), ball.getY());
-                    playerB.moveToLocation(NEUTRAL_X, SOUTH_NEUTRAL_Y);
+                    playerA.moveToLocation();
+                    playerB.moveToLocation();
                 } else {
-                    playerA.moveToLocation(ball.getX(), ball.getY());
-                    playerB.moveToLocation(NEUTRAL_X, NORTH_NEUTRAL_Y);
+                    playerA.moveToLocation();
+                    playerB.moveToLocation();
                 }
             } else {
                 if (playerA.getSide() == Side.NORTH) {
-                    playerA.moveToLocation(NEUTRAL_X, NORTH_NEUTRAL_Y);
-                    playerB.moveToLocation(ball.getX(), ball.getY());
+                    playerA.moveToLocation();
+                    playerB.moveToLocation();
                 } else {
-                    playerA.moveToLocation(NEUTRAL_X, SOUTH_NEUTRAL_Y);
-                    playerB.moveToLocation(ball.getX(), ball.getY());
+                    playerA.moveToLocation();
+                    playerB.moveToLocation();
                 }
             }
             ball.dropHeight();

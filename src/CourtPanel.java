@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class CourtPanel extends JPanel implements ActionListener {
+public class CourtPanel extends JPanel {
     private final int WIDTH = 500;
     private final int HEIGHT = 600;
     private ImageIcon background;
@@ -26,15 +24,5 @@ public class CourtPanel extends JPanel implements ActionListener {
         playerA.draw(g);
         playerB.draw(g);
         ball.draw(g);
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        playerA.moveToLocation(ball.getX(), ball.getY());
-        playerB.moveToLocation(ball.getX(), ball.getY());
-        repaint();
-        invalidate();
-        validate();
     }
 }
