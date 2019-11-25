@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class CourtPanel extends JPanel {
     private final int WIDTH = 500;
-    private final int HEIGHT = 600;
+    private final int HEIGHT = 700;
     private ImageIcon background;
     private Player playerA;
     private Player playerB;

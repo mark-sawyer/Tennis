@@ -4,7 +4,7 @@ import java.util.Random;
 public class Player implements PositionConstants {
     private GamePoint gamePoint;
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
-    private boolean isServing, isTiebreak, servedFirstInTiebreak, isTurnToHit;
+    private boolean isServing, isTiebreak, servedFirstInTiebreak;
     private double x, y, speed, xGoal, yGoal;
     private Player opponent;
     private Color colour;
@@ -14,12 +14,11 @@ public class Player implements PositionConstants {
 
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
         gamePoint = GamePoint.LOVE;
-        gamesWonInSet = 5;
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 4;
+        speed = 2;
         random = new Random();
     }
 
@@ -150,10 +149,6 @@ public class Player implements PositionConstants {
         opponent.isTiebreak = false;
     }
 
-    public Side getSide() {
-        return side;
-    }
-
     public boolean getIsTiebreak() {
         return isTiebreak;
     }
@@ -162,22 +157,21 @@ public class Player implements PositionConstants {
         return isServing;
     }
 
-    public boolean getIsTurnToHit() {
-        return isTurnToHit;
-    }
-
     public void setPosition() {
         boolean isDeuceSide;
         if (isTiebreak) {
             if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0) {
                 isDeuceSide = true;
-            } else {
+            }
+            else {
                 isDeuceSide = false;
             }
-        } else {
+        }
+        else {
             if ((GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0) {
                 isDeuceSide = true;
-            } else {
+            }
+            else {
                 isDeuceSide = false;
             }
         }
@@ -188,20 +182,31 @@ public class Player implements PositionConstants {
                     x = NORTH_SERVE_DEUCE_X;
                     y = NORTH_SERVE_DEUCE_Y;
                     ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
-                } else {
+                    xGoal = NORTH_SERVE_DEUCE_X;
+                    yGoal = NORTH_SERVE_DEUCE_Y;
+                }
+                else {
                     x = NORTH_RECEIVE_DEUCE_X;
                     y = NORTH_RECEIVE_DEUCE_Y;
                     ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
+                    xGoal = NORTH_RECEIVE_DEUCE_X;
+                    yGoal = NORTH_RECEIVE_DEUCE_Y;
                 }
-            } else {
+            }
+            else {
                 if (isServing) {
                     x = NORTH_SERVE_AD_X;
                     y = NORTH_SERVE_AD_Y;
                     ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
-                } else {
+                    xGoal = NORTH_SERVE_AD_X;
+                    yGoal = NORTH_SERVE_AD_Y;
+                }
+                else {
                     x = NORTH_RECEIVE_AD_X;
                     y = NORTH_RECEIVE_AD_Y;
                     ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
+                    xGoal = NORTH_RECEIVE_AD_X;
+                    yGoal = NORTH_RECEIVE_AD_Y;
                 }
             }
         }
@@ -211,20 +216,30 @@ public class Player implements PositionConstants {
                     x = SOUTH_SERVE_DEUCE_X;
                     y = SOUTH_SERVE_DEUCE_Y;
                     ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
-                } else {
+                    xGoal = SOUTH_SERVE_DEUCE_X;
+                    yGoal = SOUTH_SERVE_DEUCE_Y;
+                }
+                else {
                     x = SOUTH_RECEIVE_DEUCE_X;
                     y = SOUTH_RECEIVE_DEUCE_Y;
                     ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
+                    xGoal = SOUTH_RECEIVE_DEUCE_X;
+                    yGoal = SOUTH_RECEIVE_DEUCE_Y;
                 }
             } else {
                 if (isServing) {
                     x = SOUTH_SERVE_AD_X;
                     y = SOUTH_SERVE_AD_Y;
                     ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
-                } else {
+                    xGoal = SOUTH_SERVE_AD_X;
+                    yGoal = SOUTH_SERVE_AD_Y;
+                }
+                else {
                     x = SOUTH_RECEIVE_AD_X;
                     y = SOUTH_RECEIVE_AD_Y;
                     ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
+                    xGoal = SOUTH_RECEIVE_AD_X;
+                    yGoal = SOUTH_RECEIVE_AD_Y;
                 }
             }
         }
@@ -233,47 +248,42 @@ public class Player implements PositionConstants {
     public void hitBall() {
         int xTarget = random.nextInt(221) + 141;
         int yTarget;
-
         if (side == Side.NORTH) {
             yTarget = random.nextInt(67) + 458;
         } else {
             yTarget = random.nextInt(67) + 74;
         }
+        System.out.println(xTarget + " " + yTarget);
 
         double maxExtraVelocity = -12 * Math.pow(ball.getHeight(), 2) + 120 * ball.getHeight();
         if (maxExtraVelocity < 1) {
             maxExtraVelocity = 1;
         }
-        int extraVelocity = random.nextInt((int) maxExtraVelocity);
-        double heightVelocity = extraVelocity / 1000;
+//        double heightVelocity = ((double) random.nextInt((int) maxExtraVelocity)) / 1000;
+        double heightVelocity = 0.1;
         ball.setHeightVelocity(heightVelocity);
 
         double xDist = xTarget - ball.getX();
         double yDist = yTarget - ball.getY();
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        System.out.println("norm: " + norm);
         double xDir = xDist / norm;
         double yDir = yDist / norm;
 
         // Get number of steps needed for ball to hit ground
-        double stepsToGround;
-        {
-            double a = -0.00225;
-            double b = heightVelocity;
-            double c = ball.getHeight();
-
-            stepsToGround = (-b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a);
-        }
+        System.out.println("current height: " + ball.getHeight());
+        double stepsToGround = quadratic(-0.00225, heightVelocity, ball.getHeight());
+        System.out.println("stg: " + stepsToGround);
 
         double speed = norm / stepsToGround;
-        if (speed > 7) {
-            speed = 7;
-        }
+        System.out.println("speed: " + speed);
+//        if (speed > 10) {
+//            speed = 10;
+//        }
 
         ball.setSpeed(speed);
         ball.setDirection(xDir, yDir);
         ball.resetBounceNum();
-        isTurnToHit = false;
-        opponent.isTurnToHit = true;
 
         // Change location goals
         xGoal = NEUTRAL_X;
@@ -282,8 +292,10 @@ public class Player implements PositionConstants {
         } else {
             yGoal = SOUTH_NEUTRAL_Y;
         }
-        opponent.xGoal = xTarget;
-        opponent.yGoal = yTarget;
+        double stepsToMaxHeight = (0.8 * heightVelocity) / 0.0045;
+
+        opponent.xGoal = xTarget + xDir * speed * stepsToMaxHeight;
+        opponent.yGoal = yTarget + yDir * speed * stepsToMaxHeight;
     }
 
     public void draw(Graphics g) {
@@ -297,16 +309,21 @@ public class Player implements PositionConstants {
         double xDist = xGoal - x;
         double yDist = yGoal - y;
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-        double xSpeed = (xDist / norm) * speed;
-        double ySpeed = (yDist / norm) * speed;
+        if (norm < 3) {
+            norm = 0;
+        }
+        double xSpeed, ySpeed;
+        if (norm != 0) {
+            xSpeed = (xDist / norm) * speed;
+            ySpeed = (yDist / norm) * speed;
+        }
+        else {
+            xSpeed = 0;
+            ySpeed = 0;
+        }
 
         x += xSpeed;
         y += ySpeed;
-    }
-
-    public void changeLocationGoal(double xGoal, double yGoal) {
-        this.xGoal = xGoal;
-        this.yGoal = yGoal;
     }
 
     public double getX() {
@@ -315,6 +332,10 @@ public class Player implements PositionConstants {
 
     public double getY() {
         return y;
+    }
+
+    private double quadratic(double a, double b, double c) {
+        return ((-b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a));
     }
 
     @Override

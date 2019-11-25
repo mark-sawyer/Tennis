@@ -3,8 +3,9 @@ import java.awt.*;
 
 public class ScorePanel extends JPanel {
     private final int WIDTH = 200;
-    private final int HEIGHT = 600;
+    private final int HEIGHT = 700;
     private JButton play;
+    private JButton playFrame;
     private JLabel scoreA;
     private JLabel scoreB;
 
@@ -14,6 +15,8 @@ public class ScorePanel extends JPanel {
 
         play = new JButton("Play");
         add(play, BorderLayout.SOUTH);
+        playFrame = new JButton("Frame");
+        add(playFrame, BorderLayout.NORTH);
 
         scoreA = new JLabel();
         add(scoreA, BorderLayout.WEST);
@@ -31,5 +34,9 @@ public class ScorePanel extends JPanel {
 
     public JButton getPlay() {
         return play;
+    }
+
+    public JButton getPlayFrame() {
+        return playFrame;
     }
 }

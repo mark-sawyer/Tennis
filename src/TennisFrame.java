@@ -17,6 +17,7 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
 
         scorePanel = new ScorePanel();
         scorePanel.getPlay().addActionListener(this);
+        scorePanel.getPlayFrame().addActionListener(this);
 
         ball = new Ball();
         Random random = new Random();
@@ -71,23 +72,8 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         }
 
         else if (e.getSource() == timer) {
-            if (playerA.getIsTurnToHit()) {
-                if (playerA.getSide() == Side.NORTH) {
-                    playerA.moveToLocation();
-                    playerB.moveToLocation();
-                } else {
-                    playerA.moveToLocation();
-                    playerB.moveToLocation();
-                }
-            } else {
-                if (playerA.getSide() == Side.NORTH) {
-                    playerA.moveToLocation();
-                    playerB.moveToLocation();
-                } else {
-                    playerA.moveToLocation();
-                    playerB.moveToLocation();
-                }
-            }
+            playerA.moveToLocation();
+            playerB.moveToLocation();
             ball.dropHeight();
             ball.move();
 
@@ -123,7 +109,7 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
                     if (isTiebreak) {
                         playerA.winTiebreakPoint();
                     } else {
-                        if (ball.getHeight() < 10) {
+                        if (ball.getHeight() < 5) {
                             playerA.hitBall();
                         }
                     }
@@ -134,6 +120,66 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
                         playerB.winTiebreakPoint();
                     } else {
                         if (ball.getHeight() < 10) {
+                            playerB.hitBall();
+                        }
+                    }
+                }
+            }
+
+            courtPanel.repaint();
+            courtPanel.invalidate();
+            courtPanel.validate();
+        }
+
+        else if (e.getSource() == scorePanel.getPlayFrame()) {
+            playerA.moveToLocation();
+            playerB.moveToLocation();
+            ball.dropHeight();
+            ball.move();
+
+            boolean isTiebreak = playerA.getIsTiebreak();
+            boolean playerAServing = playerA.getIsServing();
+
+            int bounceNum = ball.getBounceNum();
+            if (bounceNum == 2) {
+                timer.stop();
+                if (isTiebreak) {
+                    if (playerAServing) {
+                        playerA.winTiebreakPoint();
+                    } else {
+                        playerB.winTiebreakPoint();
+                    }
+                } else {
+                    if (playerAServing) {
+                        playerA.winPoint();
+                    } else {
+                        playerB.winPoint();
+                    }
+                }
+            }
+
+            else {
+                double playerADist = Math.sqrt(Math.pow(playerA.getX() - ball.getX(), 2) +
+                        Math.pow(playerA.getY() - ball.getY(), 2));
+                double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
+                        Math.pow(playerB.getY() - ball.getY(), 2));
+
+                if (playerADist < 20 && playerADist < playerBDist) {
+//                    timer.stop();
+                    if (isTiebreak) {
+                        playerA.winTiebreakPoint();
+                    } else {
+                        if (ball.getHeight() < 5) {
+                            playerA.hitBall();
+                        }
+                    }
+
+                } else if (playerBDist < 20 && playerBDist < playerADist) {
+//                    timer.stop();
+                    if (isTiebreak) {
+                        playerB.winTiebreakPoint();
+                    } else {
+                        if (ball.getHeight() < 5) {
                             playerB.hitBall();
                         }
                     }

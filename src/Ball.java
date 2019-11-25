@@ -2,21 +2,16 @@ import java.awt.*;
 import java.util.Random;
 
 public class Ball {
-    private double x;
-    private double y;
-    private double height;
-    private double heightVelocity;
+    private double x, y, height, heightVelocity, speed, xDir, yDir;
     private int bounceNum;
     private final double velocityLostPerStep = 0.0045;
-    private double speed;
-    private double xDir;
-    private double yDir;
     private Random random;
-    private Color colour;
+    private Color colour, bounceColour;
 
     public Ball() {
         random = new Random();
         colour = Color.GREEN;
+        bounceColour = new Color(225, 128, 0);
     }
 
     public void setPosition(double x, double y) {
@@ -38,6 +33,7 @@ public class Ball {
 
     public void dropHeight() {
         height += heightVelocity;
+        System.out.println(height);
         if (height < 0) {
             ++bounceNum;
             height = Math.abs(height);
@@ -77,10 +73,14 @@ public class Ball {
     }
 
     public void draw(Graphics g) {
-        g.setColor(colour);
+        if (height < 0.5) {
+            g.setColor(bounceColour);
+        } else {
+            g.setColor(colour);
+        }
         int xPos = (int) Math.rint(x);
         int yPos = (int) Math.rint(y);
-        double radius = (2.0 / 3.0) * height + 5.0;
+        double radius = height + 5.0;
         int intRadius = (int) Math.rint(radius);
 
         g.fillOval(xPos - intRadius, yPos - intRadius, 2 * intRadius, 2 * intRadius);
