@@ -160,7 +160,7 @@ public class Player implements PositionConstants {
     public boolean getTurnToHitBall() {
         return turnToHitBall;
     }
-    
+
     public void setPosition() {
         boolean isDeuceSide;
         if (isTiebreak) {
@@ -260,11 +260,20 @@ public class Player implements PositionConstants {
         opponent.turnToHitBall = true;
         int yTarget;
         if (side == Side.NORTH) {
-            yTarget = random.nextInt(67) + 458;
+            yTarget = random.nextInt(Y_TARGET_RANGE) + SOUTH_Y_TARGET_LOWER_BOUND;
         } else {
-            yTarget = random.nextInt(67) + 74;
+            yTarget = random.nextInt(Y_TARGET_RANGE) + NORTH_Y_TARGET_LOWER_BOUND;
         }
-        int xTarget = random.nextInt(221) + 141;
+        double yDist = yTarget - ball.getY();
+        int absYDist = (int) Math.abs(yDist);
+        int xTarget = (int) ball.getX() + (random.nextInt(absYDist) - (absYDist / 2));
+        if (xTarget < X_TARGET_LOWER_BOUND) {
+            xTarget = X_TARGET_LOWER_BOUND;
+        }
+        else if (xTarget > X_TARGET_UPPER_BOUND) {
+            xTarget = X_TARGET_UPPER_BOUND;
+        }
+
         System.out.println("xTarget: " + xTarget + " yTarget: " + yTarget);
 
         double extraVelocity = -44.4444 * ball.getHeight() + 222.2222;
@@ -273,11 +282,9 @@ public class Player implements PositionConstants {
         }
 
         double heightVelocity = (extraVelocity + (((double) random.nextInt((int) extraVelocity)) / 2)) / 1000;
-//        double heightVelocity = 0.1;
         ball.setHeightVelocity(heightVelocity);
 
         double xDist = xTarget - ball.getX();
-        double yDist = yTarget - ball.getY();
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
         double xDir = xDist / norm;
         double yDir = yDist / norm;
@@ -285,18 +292,10 @@ public class Player implements PositionConstants {
         // Get number of steps needed for ball to hit ground
         double stepsToGround = quadratic(-0.00225, heightVelocity, ball.getHeight());
 
-        double speed = norm / stepsToGround;
-        if (speed > 10) {
-            double reductionRate = 10 / speed;
-            speed = 10;
-            xDist *= reductionRate;
-            yDist *= reductionRate;
-            xTarget = (int) Math.rint(xDist + ball.getX());
-            yTarget = (int) Math.rint(yDist + ball.getY());
-        }
-        System.out.println("speed: " + speed);
+        double ballSpeed = norm / stepsToGround;
+        System.out.println("ballSpeed: " + ballSpeed);
 
-        ball.setSpeed(speed);
+        ball.setSpeed(ballSpeed);
         ball.setDirection(xDir, yDir);
         ball.resetBounceNum();
 
@@ -308,19 +307,25 @@ public class Player implements PositionConstants {
             yGoal = SOUTH_NEUTRAL_Y;
         }
 
+        // What will the maximum height be after the bounce?
+        // Get the velocity when the ball hits the ground.
+        double bounceVelocity = 0.8 * (-0.0045 * stepsToGround + heightVelocity);
+        double stepsToMaxHeight = -bounceVelocity / 0.0045;
 
-
-        double stepsToMaxHeight = (-0.8 * heightVelocity) / 0.0045;
         double maxBounceHeight = -0.00225 * Math.pow(stepsToMaxHeight, 2) +
-                0.8 * heightVelocity * stepsToMaxHeight;
+                bounceVelocity * stepsToMaxHeight;
+        System.out.println("predicted max bounce height: " + maxBounceHeight);
         if (maxBounceHeight < 5) {
-            opponent.xGoal = xTarget + xDir * speed * stepsToMaxHeight;
-            opponent.yGoal = yTarget + yDir * speed * stepsToMaxHeight;
+            System.out.println("steps to max height: " + stepsToMaxHeight);
+            System.out.println("xDir: " + xDir);
+            System.out.println("yDir: " + yDir);
+            opponent.xGoal = xTarget + xDir * ballSpeed * stepsToMaxHeight;
+            opponent.yGoal = yTarget + yDir * ballSpeed * stepsToMaxHeight;
         }
         else {
-            double stepsToHeightFive = quadratic(-0.00225, 0.8 * heightVelocity, 5);
-            opponent.xGoal = xTarget + xDir * speed * stepsToHeightFive;
-            opponent.yGoal = yTarget + yDir * speed * stepsToHeightFive;
+            double stepsToHeightFive = quadratic(-0.00225, bounceVelocity, 5);
+            opponent.xGoal = xTarget + xDir * ballSpeed * stepsToHeightFive;
+            opponent.yGoal = yTarget + yDir * ballSpeed * stepsToHeightFive;
         }
     }
 
