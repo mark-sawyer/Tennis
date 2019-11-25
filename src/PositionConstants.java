@@ -15,4 +15,7 @@ public interface PositionConstants {
     int SOUTH_RECEIVE_DEUCE_Y = 538;
     int SOUTH_RECEIVE_AD_X = 143;
     int SOUTH_RECEIVE_AD_Y = 538;
+    int NEUTRAL_X = 249;
+    int NORTH_NEUTRAL_Y = 46;
+    int SOUTH_NEUTRAL_Y = 553;
 }

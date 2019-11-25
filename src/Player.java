@@ -5,7 +5,7 @@ public class Player implements PositionConstants {
     private GamePoint gamePoint;
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
     private boolean isServing, isTiebreak, servedFirstInTiebreak, isTurnToHit;
-    private double x, y, speed;
+    private double x, y, speed, xGoal, yGoal;
     private Player opponent;
     private Color colour;
     private Ball ball;
@@ -19,7 +19,7 @@ public class Player implements PositionConstants {
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 2;
+        speed = 4;
         random = new Random();
     }
 
@@ -240,7 +240,12 @@ public class Player implements PositionConstants {
             yTarget = random.nextInt(67) + 74;
         }
 
-        double heightVelocity = ((double) random.nextInt(300)) / 1000;
+        double maxExtraVelocity = -12 * Math.pow(ball.getHeight(), 2) + 120 * ball.getHeight();
+        if (maxExtraVelocity < 1) {
+            maxExtraVelocity = 1;
+        }
+        int extraVelocity = random.nextInt((int) maxExtraVelocity);
+        double heightVelocity = extraVelocity / 1000;
         ball.setHeightVelocity(heightVelocity);
 
         double xDist = xTarget - ball.getX();
@@ -248,7 +253,23 @@ public class Player implements PositionConstants {
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
         double xDir = xDist / norm;
         double yDir = yDist / norm;
-        ball.setSpeed(4);
+
+        // Get number of steps needed for ball to hit ground
+        double stepsToGround;
+        {
+            double a = -0.00225;
+            double b = heightVelocity;
+            double c = ball.getHeight();
+
+            stepsToGround = (-b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a);
+        }
+
+        double speed = norm / stepsToGround;
+        if (speed > 7) {
+            speed = 7;
+        }
+
+        ball.setSpeed(speed);
         ball.setDirection(xDir, yDir);
         ball.resetBounceNum();
         isTurnToHit = false;
@@ -262,9 +283,9 @@ public class Player implements PositionConstants {
         g.fillOval(xPos - 15, yPos - 15, 30, 30);
     }
 
-    public void moveToLocation(double xLoc, double yLoc) {
-        double xDist = xLoc - x;
-        double yDist = yLoc - y;
+    public void moveToLocation() {
+        double xDist = xGoal - x;
+        double yDist = yGoal - y;
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
         double xSpeed = (xDist / norm) * speed;
         double ySpeed = (yDist / norm) * speed;

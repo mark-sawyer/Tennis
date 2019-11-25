@@ -16,13 +16,12 @@ public class Ball {
 
     public Ball() {
         random = new Random();
-        setPosition();
         colour = Color.GREEN;
     }
 
-    public void setPosition() {
-        x = random.nextInt(501);
-        y = random.nextInt(601);
+    public void setPosition(double x, double y) {
+        this.x = x;
+        this.y = y;
         height = 10;
         heightVelocity = 0;
         speed = 0;
@@ -51,6 +50,14 @@ public class Ball {
         this.speed = speed;
     }
 
+    public void setHeightVelocity(double heightVelocity) {
+        this.heightVelocity = heightVelocity;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
     public void setDirection(double xDir, double yDir) {
         this.xDir = xDir;
         this.yDir = yDir;
@@ -63,6 +70,10 @@ public class Ball {
 
     public int getBounceNum() {
         return bounceNum;
+    }
+
+    public void resetBounceNum() {
+        bounceNum = 0;
     }
 
     public void draw(Graphics g) {

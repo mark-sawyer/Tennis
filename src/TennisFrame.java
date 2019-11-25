@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class TennisFrame extends JFrame implements ActionListener {
+public class TennisFrame extends JFrame implements ActionListener, PositionConstants {
     private Player playerA;
     private Player playerB;
     private Ball ball;
@@ -32,7 +32,7 @@ public class TennisFrame extends JFrame implements ActionListener {
 
         courtPanel = new CourtPanel(playerA, playerB, ball);
 
-        timer = new Timer(5, this);
+        timer = new Timer(30, this);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -59,12 +59,6 @@ public class TennisFrame extends JFrame implements ActionListener {
     public void game() {
         playerA.setPosition();
         playerB.setPosition();
-        ball.setPosition();
-        if (playerA.getIsServing()) {
-            System.out.println("A serving");
-        } else {
-            System.out.println("B serving");
-        }
         timer.start();
     }
 
@@ -77,8 +71,23 @@ public class TennisFrame extends JFrame implements ActionListener {
         }
 
         else if (e.getSource() == timer) {
-            playerA.moveToLocation(ball.getX(), ball.getY());
-            playerB.moveToLocation(ball.getX(), ball.getY());
+            if (playerA.getIsTurnToHit()) {
+                if (playerA.getSide() == Side.NORTH) {
+                    playerA.moveToLocation(ball.getX(), ball.getY());
+                    playerB.moveToLocation(NEUTRAL_X, SOUTH_NEUTRAL_Y);
+                } else {
+                    playerA.moveToLocation(ball.getX(), ball.getY());
+                    playerB.moveToLocation(NEUTRAL_X, NORTH_NEUTRAL_Y);
+                }
+            } else {
+                if (playerA.getSide() == Side.NORTH) {
+                    playerA.moveToLocation(NEUTRAL_X, NORTH_NEUTRAL_Y);
+                    playerB.moveToLocation(ball.getX(), ball.getY());
+                } else {
+                    playerA.moveToLocation(NEUTRAL_X, SOUTH_NEUTRAL_Y);
+                    playerB.moveToLocation(ball.getX(), ball.getY());
+                }
+            }
             ball.dropHeight();
             ball.move();
 
@@ -114,7 +123,9 @@ public class TennisFrame extends JFrame implements ActionListener {
                     if (isTiebreak) {
                         playerA.winTiebreakPoint();
                     } else {
-                        playerA.hitBall();
+                        if (ball.getHeight() < 10) {
+                            playerA.hitBall();
+                        }
                     }
 
                 } else if (playerBDist < 20 && playerBDist < playerADist) {
@@ -122,7 +133,9 @@ public class TennisFrame extends JFrame implements ActionListener {
                     if (isTiebreak) {
                         playerB.winTiebreakPoint();
                     } else {
-                        playerB.hitBall();
+                        if (ball.getHeight() < 10) {
+                            playerB.hitBall();
+                        }
                     }
                 }
             }
