@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class ScorePanel extends JPanel {
     private final int WIDTH = 200;
-    private final int HEIGHT = 700;
+    private final int HEIGHT = 500;
     private JButton play;
     private JButton playFrame;
     private JLabel scoreA;

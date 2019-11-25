@@ -346,8 +346,8 @@ public class Player implements PositionConstants {
 
         // What will the maximum height be after the bounce?
         // Get the velocity when the ball hits the ground.
-        double bounceVelocity = 0.8 * (-0.0045 * stepsToGround + heightVelocity);
-        double stepsToMaxHeight = -bounceVelocity / 0.0045;
+        double bounceVelocity = -0.8 * (-0.0045 * stepsToGround + heightVelocity);
+        double stepsToMaxHeight = bounceVelocity / 0.0045;
         System.out.println("Steps to max height: " + stepsToMaxHeight);
         double maxBounceHeight = -0.00225 * Math.pow(stepsToMaxHeight, 2) +
                 bounceVelocity * stepsToMaxHeight;

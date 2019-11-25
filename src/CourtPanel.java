@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CourtPanel extends JPanel {
-    private final int WIDTH = 500;
-    private final int HEIGHT = 700;
+    private final int WIDTH = 900;
+    private final int HEIGHT = 500;
     private ImageIcon background;
     private Player playerA;
     private Player playerB;
