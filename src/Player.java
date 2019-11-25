@@ -5,7 +5,7 @@ public class Player implements PositionConstants {
     private GamePoint gamePoint;
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
     private boolean isServing, isTiebreak, servedFirstInTiebreak, turnToHitBall, hasServed;
-    private double x, y, speed, xGoal, yGoal;
+    private double x, y, speed, yGoal, xGoal;
     private Player opponent;
     private Color colour;
     private Ball ball;
@@ -18,7 +18,7 @@ public class Player implements PositionConstants {
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 2;
+        speed = 7;
         random = new Random();
     }
 
@@ -68,13 +68,13 @@ public class Player implements PositionConstants {
 
     public void swapSides() {
         switch (side) {
-            case NORTH:
-                side = Side.SOUTH;
-                opponent.side = Side.NORTH;
+            case EAST:
+                side = Side.WEST;
+                opponent.side = Side.EAST;
                 break;
-            case SOUTH:
-                side = Side.NORTH;
-                opponent.side = Side.SOUTH;
+            case WEST:
+                side = Side.EAST;
+                opponent.side = Side.WEST;
                 break;
         }
     }
@@ -164,70 +164,70 @@ public class Player implements PositionConstants {
     public void setPosition() {
         boolean isDeuceSide = getIsDeuce();
 
-        if (side == Side.NORTH) {
+        if (side == Side.EAST) {
             if (isDeuceSide) {
                 if (isServing) {
-                    x = NORTH_SERVE_DEUCE_X;
-                    y = NORTH_SERVE_DEUCE_Y;
-                    ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
-                    xGoal = NORTH_SERVE_DEUCE_X;
-                    yGoal = NORTH_SERVE_DEUCE_Y;
+                    x = EAST_SERVE_DEUCE_X;
+                    y = EAST_SERVE_DEUCE_Y;
+                    ball.setPosition(EAST_SERVE_DEUCE_X - 10, EAST_SERVE_DEUCE_Y);
+                    xGoal = EAST_SERVE_DEUCE_X;
+                    yGoal = EAST_SERVE_DEUCE_Y;
                 }
                 else {
-                    x = NORTH_RECEIVE_DEUCE_X;
-                    y = NORTH_RECEIVE_DEUCE_Y;
-                    ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
-                    xGoal = NORTH_RECEIVE_DEUCE_X;
-                    yGoal = NORTH_RECEIVE_DEUCE_Y;
+                    x = EAST_RECEIVE_DEUCE_X;
+                    y = EAST_RECEIVE_DEUCE_Y;
+                    ball.setPosition(WEST_SERVE_DEUCE_X + 10, WEST_SERVE_DEUCE_Y);
+                    xGoal = EAST_RECEIVE_DEUCE_X;
+                    yGoal = EAST_RECEIVE_DEUCE_Y;
                 }
             }
             else {
                 if (isServing) {
-                    x = NORTH_SERVE_AD_X;
-                    y = NORTH_SERVE_AD_Y;
-                    ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
-                    xGoal = NORTH_SERVE_AD_X;
-                    yGoal = NORTH_SERVE_AD_Y;
+                    x = EAST_SERVE_AD_X;
+                    y = EAST_SERVE_AD_Y;
+                    ball.setPosition(EAST_SERVE_AD_X - 10, EAST_SERVE_AD_Y);
+                    xGoal = EAST_SERVE_AD_X;
+                    yGoal = EAST_SERVE_AD_Y;
                 }
                 else {
-                    x = NORTH_RECEIVE_AD_X;
-                    y = NORTH_RECEIVE_AD_Y;
-                    ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
-                    xGoal = NORTH_RECEIVE_AD_X;
-                    yGoal = NORTH_RECEIVE_AD_Y;
+                    x = EAST_RECEIVE_AD_X;
+                    y = EAST_RECEIVE_AD_Y;
+                    ball.setPosition(WEST_SERVE_AD_X + 10, WEST_SERVE_AD_Y);
+                    xGoal = EAST_RECEIVE_AD_X;
+                    yGoal = EAST_RECEIVE_AD_Y;
                 }
             }
         }
         else {
             if (isDeuceSide) {
                 if (isServing) {
-                    x = SOUTH_SERVE_DEUCE_X;
-                    y = SOUTH_SERVE_DEUCE_Y;
-                    ball.setPosition(SOUTH_SERVE_DEUCE_X, SOUTH_SERVE_DEUCE_Y - 10);
-                    xGoal = SOUTH_SERVE_DEUCE_X;
-                    yGoal = SOUTH_SERVE_DEUCE_Y;
+                    x = WEST_SERVE_DEUCE_X;
+                    y = WEST_SERVE_DEUCE_Y;
+                    ball.setPosition(WEST_SERVE_DEUCE_X + 10, WEST_SERVE_DEUCE_Y);
+                    xGoal = WEST_SERVE_DEUCE_X;
+                    yGoal = WEST_SERVE_DEUCE_Y;
                 }
                 else {
-                    x = SOUTH_RECEIVE_DEUCE_X;
-                    y = SOUTH_RECEIVE_DEUCE_Y;
-                    ball.setPosition(NORTH_SERVE_DEUCE_X, NORTH_SERVE_DEUCE_Y + 10);
-                    xGoal = SOUTH_RECEIVE_DEUCE_X;
-                    yGoal = SOUTH_RECEIVE_DEUCE_Y;
+                    x = WEST_RECEIVE_DEUCE_X;
+                    y = WEST_RECEIVE_DEUCE_Y;
+                    ball.setPosition(EAST_SERVE_DEUCE_X - 10, EAST_SERVE_DEUCE_Y);
+                    xGoal = WEST_RECEIVE_DEUCE_X;
+                    yGoal = WEST_RECEIVE_DEUCE_Y;
                 }
             } else {
                 if (isServing) {
-                    x = SOUTH_SERVE_AD_X;
-                    y = SOUTH_SERVE_AD_Y;
-                    ball.setPosition(SOUTH_SERVE_AD_X, SOUTH_SERVE_AD_Y - 10);
-                    xGoal = SOUTH_SERVE_AD_X;
-                    yGoal = SOUTH_SERVE_AD_Y;
+                    x = WEST_SERVE_AD_X;
+                    y = WEST_SERVE_AD_Y;
+                    ball.setPosition(WEST_SERVE_AD_X + 10, WEST_SERVE_AD_Y);
+                    xGoal = WEST_SERVE_AD_X;
+                    yGoal = WEST_SERVE_AD_Y;
                 }
                 else {
-                    x = SOUTH_RECEIVE_AD_X;
-                    y = SOUTH_RECEIVE_AD_Y;
-                    ball.setPosition(NORTH_SERVE_AD_X, NORTH_SERVE_AD_Y + 10);
-                    xGoal = SOUTH_RECEIVE_AD_X;
-                    yGoal = SOUTH_RECEIVE_AD_Y;
+                    x = WEST_RECEIVE_AD_X;
+                    y = WEST_RECEIVE_AD_Y;
+                    ball.setPosition(EAST_SERVE_AD_X - 10, EAST_SERVE_AD_Y);
+                    xGoal = WEST_RECEIVE_AD_X;
+                    yGoal = WEST_RECEIVE_AD_Y;
                 }
             }
         }
@@ -265,48 +265,46 @@ public class Player implements PositionConstants {
         turnToHitBall = false;
         opponent.turnToHitBall = true;
 
-        int xTarget;
         int yTarget;
-        double yDist;
+        int xTarget;
         if (isServing && !hasServed) {
-            if (side == Side.NORTH) {
+            if (side == Side.EAST) {
                 if (getIsDeuce()) {
-                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + SOUTH_DEUCE_X_TARGET_LOWER_BOUND_SERVE;
-                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + SOUTH_Y_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + WEST_DEUCE_Y_TARGET_LOWER_BOUND_SERVE;
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + WEST_X_TARGET_LOWER_BOUND_SERVE;
                 }
                 else {
-                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + SOUTH_AD_X_TARGET_LOWER_BOUND_SERVE;
-                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + SOUTH_Y_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + WEST_AD_Y_TARGET_LOWER_BOUND_SERVE;
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + WEST_X_TARGET_LOWER_BOUND_SERVE;
                 }
             }
             else {
                 if (getIsDeuce()) {
-                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + NORTH_DEUCE_X_TARGET_LOWER_BOUND_SERVE;
-                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + NORTH_Y_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + EAST_DEUCE_Y_TARGET_LOWER_BOUND_SERVE;
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + EAST_X_TARGET_LOWER_BOUND_SERVE;
                 }
                 else {
-                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + NORTH_AD_X_TARGET_LOWER_BOUND_SERVE;
-                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + NORTH_Y_TARGET_LOWER_BOUND_SERVE;
+                    yTarget = random.nextInt(Y_TARGET_RANGE_SERVE) + EAST_AD_Y_TARGET_LOWER_BOUND_SERVE;
+                    xTarget = random.nextInt(X_TARGET_RANGE_SERVE) + EAST_X_TARGET_LOWER_BOUND_SERVE;
                 }
             }
-            yDist = yTarget - ball.getY();
             hasServed = true;
         }
         else {
-            if (side == Side.NORTH) {
-                yTarget = random.nextInt(Y_TARGET_RANGE) + SOUTH_Y_TARGET_LOWER_BOUND;
+            if (side == Side.EAST) {
+                xTarget = random.nextInt(X_TARGET_RANGE) + WEST_X_TARGET_LOWER_BOUND;
             }
             else {
-                yTarget = random.nextInt(Y_TARGET_RANGE) + NORTH_Y_TARGET_LOWER_BOUND;
+                xTarget = random.nextInt(X_TARGET_RANGE) + EAST_X_TARGET_LOWER_BOUND;
             }
-            yDist = yTarget - ball.getY();
-            int absYDist = (int) Math.abs(yDist);
-            xTarget = (int) ball.getX() + (random.nextInt(absYDist) - (absYDist / 2));
-            if (xTarget < X_TARGET_LOWER_BOUND) {
-                xTarget = X_TARGET_LOWER_BOUND;
+
+            int absXDist = (int) Math.abs(xTarget - ball.getX());
+            yTarget = (int) ball.getY() + (random.nextInt(absXDist) - (absXDist / 2));
+            if (yTarget < Y_TARGET_LOWER_BOUND) {
+                yTarget = Y_TARGET_LOWER_BOUND;
             }
-            else if (xTarget > X_TARGET_UPPER_BOUND) {
-                xTarget = X_TARGET_UPPER_BOUND;
+            else if (yTarget > Y_TARGET_UPPER_BOUND) {
+                yTarget = Y_TARGET_UPPER_BOUND;
             }
         }
 
@@ -322,7 +320,8 @@ public class Player implements PositionConstants {
         ball.setHeightVelocity(heightVelocity);
 
         double xDist = xTarget - ball.getX();
-        double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        double yDist = yTarget - ball.getY();
+        double norm = Math.sqrt(Math.pow(yDist, 2) + Math.pow(xDist, 2));
         double xDir = xDist / norm;
         double yDir = yDist / norm;
 
@@ -337,11 +336,11 @@ public class Player implements PositionConstants {
         ball.resetBounceNum();
 
         // Change location goals
-        xGoal = NEUTRAL_X;
-        if (side == Side.NORTH) {
-            yGoal = NORTH_NEUTRAL_Y;
+        yGoal = NEUTRAL_Y;
+        if (side == Side.EAST) {
+            xGoal = EAST_NEUTRAL_X;
         } else {
-            yGoal = SOUTH_NEUTRAL_Y;
+            xGoal = WEST_NEUTRAL_X;
         }
 
         // What will the maximum height be after the bounce?
@@ -353,7 +352,6 @@ public class Player implements PositionConstants {
                 bounceVelocity * stepsToMaxHeight;
         System.out.println("predicted max bounce height: " + maxBounceHeight);
         if (maxBounceHeight < 5) {
-            System.out.println("steps to max height: " + stepsToMaxHeight);
             System.out.println("xDir: " + xDir);
             System.out.println("yDir: " + yDir);
             opponent.xGoal = xTarget + xDir * ballSpeed * stepsToMaxHeight;

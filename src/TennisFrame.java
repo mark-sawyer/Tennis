@@ -24,11 +24,11 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         ball = new Ball();
         Random random = new Random();
         if (random.nextBoolean()) {
-            playerA = new Player(true, Color.RED, ball, Side.NORTH);
-            playerB = new Player(false, Color.BLUE, ball, Side.SOUTH);
+            playerA = new Player(true, Color.RED, ball, Side.EAST);
+            playerB = new Player(false, Color.BLUE, ball, Side.WEST);
         } else {
-            playerA = new Player(false, Color.RED, ball, Side.NORTH);
-            playerB = new Player(true, Color.BLUE, ball, Side.SOUTH);
+            playerA = new Player(false, Color.RED, ball, Side.EAST);
+            playerB = new Player(true, Color.BLUE, ball, Side.WEST);
         }
         playerA.setOpponent(playerB);
         playerB.setOpponent(playerA);
