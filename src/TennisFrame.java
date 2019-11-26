@@ -53,18 +53,19 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
     }
 
     public void match() {
-        if (playerA.getSetsWonInMatch() == 3 || playerB.getSetsWonInMatch() == 3) {
-            System.out.println("game over");
+        if (playerA.getSetsWonInMatch() == 3) {
+            scorePanel.getMessage().setForeground(playerA.getColour());
+            scorePanel.getMessage().setText("RED WINS");
+        }
+        else if (playerB.getSetsWonInMatch() == 3) {
+            scorePanel.getMessage().setForeground(playerB.getColour());
+            scorePanel.getMessage().setText("BLUE WINS");
         }
         else {
-            game();
+            playerA.setPosition();
+            playerB.setPosition();
+            timer.start();
         }
-    }
-
-    public void game() {
-        playerA.setPosition();
-        playerB.setPosition();
-        timer.start();
     }
 
     @Override

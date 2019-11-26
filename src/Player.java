@@ -16,7 +16,8 @@ public class Player implements PositionConstants {
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
         x = -100;  // So not seen at the start
         y = -100;
-        gamePoint = GamePoint.LOVE;
+        gamePoint = GamePoint.FORTY;
+        gamesWonInSet = 5;
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
@@ -104,7 +105,6 @@ public class Player implements PositionConstants {
         if (pointsWonInTiebreak >= 7 && opponent.pointsWonInTiebreak <= pointsWonInTiebreak - 2) {
             winSet();
             endTiebreak();
-            swapSides();
             if (isServing && servedFirstInTiebreak) {
                 swapServe();
             }
@@ -403,10 +403,20 @@ public class Player implements PositionConstants {
     @Override
     public String toString() {
         if (isTiebreak) {
-            return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak;
+            if (isServing) {
+                return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak + " O";
+            }
+            else {
+                return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak;
+            }
         }
         else {
-            return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString();
+            if (isServing) {
+                return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString() + " O";
+            }
+            else {
+                return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString();
+            }
         }
     }
 }
