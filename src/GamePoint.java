@@ -26,7 +26,7 @@ public enum GamePoint {
         String s = "";
         switch (this) {
             case LOVE:
-                s = "0";
+                s = "0 ";
                 break;
             case FIFTEEN:
                 s = "15";

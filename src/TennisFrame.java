@@ -20,15 +20,18 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         scorePanel = new ScorePanel();
         scorePanel.getPlay().addActionListener(this);
         scorePanel.getPlayFrame().addActionListener(this);
+        scorePanel.getNewMatch().addActionListener(this);
 
         ball = new Ball();
         Random random = new Random();
         if (random.nextBoolean()) {
             playerA = new Player(true, Color.RED, ball, Side.EAST);
             playerB = new Player(false, Color.BLUE, ball, Side.WEST);
+            scorePanel.getServerIcon().setForeground(Color.RED);
         } else {
             playerA = new Player(false, Color.RED, ball, Side.EAST);
             playerB = new Player(true, Color.BLUE, ball, Side.WEST);
+            scorePanel.getServerIcon().setForeground(Color.BLUE);
         }
         playerA.setOpponent(playerB);
         playerB.setOpponent(playerA);
@@ -40,7 +43,7 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
 
         courtPanel = new CourtPanel(playerA, playerB, ball);
 
-        timer = new Timer(5, this);
+        timer = new Timer(10, this);
         pointDelayTimer = new Timer(1000, this);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -76,12 +79,22 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
             scorePanel.getScoreB().setText(playerB.toString());
         }
 
-        else if (e.getSource() == timer) {
+        else if (e.getSource() == scorePanel.getPlayFrame()) {
+            timer.stop();
             doAFrame();
         }
 
-        else if (e.getSource() == scorePanel.getPlayFrame()) {
+        else if (e.getSource() == scorePanel.getNewMatch()) {
             timer.stop();
+            pointDelayTimer.stop();
+            playerA.resetMatch();
+            scorePanel.getMessage().setText("");
+            scorePanel.getScoreA().setText(playerA.toString());
+            scorePanel.getScoreB().setText(playerB.toString());
+            match();
+        }
+
+        else if (e.getSource() == timer) {
             doAFrame();
         }
 
@@ -150,6 +163,12 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
 
     private void pointTransition(Player winner) {
         JLabel message = scorePanel.getMessage();
+        if (playerA.getIsServing()) {
+            scorePanel.getServerIcon().setForeground(Color.RED);
+        }
+        else {
+            scorePanel.getServerIcon().setForeground(Color.BLUE);
+        }
         Color colour = winner.getColour();
         message.setForeground(colour);
         if (colour.equals(Color.RED)) {

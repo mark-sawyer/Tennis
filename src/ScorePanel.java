@@ -1,14 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.zip.DeflaterInputStream;
 
 public class ScorePanel extends JPanel {
     private final int WIDTH = 200;
     private final int HEIGHT = 500;
-    private JButton play;
-    private JButton playFrame;
-    private JLabel scoreA;
-    private JLabel scoreB;
-    private JLabel message;
+    private JButton play, playFrame, newMatch;
+    private JLabel scoreA, scoreB, serverIcon, message;
 
     public ScorePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -20,16 +18,23 @@ public class ScorePanel extends JPanel {
         playFrame = new JButton("Frame");
         playFrame.setPreferredSize(new Dimension(150, 50));
         add(playFrame);
+        newMatch = new JButton("New Match");
+        newMatch.setPreferredSize(new Dimension(150, 50));
+        add(newMatch);
 
-        scoreA = new JLabel();
-        scoreA.setPreferredSize(new Dimension(80, 50));
-        scoreA.setFont(new Font("Arial", Font.BOLD, 16));
+        scoreA = new JLabel("", SwingConstants.CENTER);
+        scoreA.setPreferredSize(new Dimension(90, 20));
+        scoreA.setFont(new Font("Monospaced", Font.BOLD, 18));
         add(scoreA);
-        scoreB = new JLabel();
-        scoreB.setPreferredSize(new Dimension(80, 50));
-        scoreB.setFont(new Font("Arial", Font.BOLD, 16));
+        scoreB = new JLabel("", SwingConstants.CENTER);
+        scoreB.setPreferredSize(new Dimension(90, 20));
+        scoreB.setFont(new Font("Monospaced", Font.BOLD, 18));
         add(scoreB);
-        message = new JLabel();
+        serverIcon = new JLabel("O", SwingConstants.CENTER);
+        serverIcon.setPreferredSize(new Dimension(150, 50));
+        serverIcon.setFont(new Font("Arial", Font.BOLD, 20));
+        add(serverIcon);
+        message = new JLabel("", SwingConstants.CENTER);
         message.setPreferredSize(new Dimension(150, 100));
         message.setFont(new Font("Arial", Font.BOLD, 24));
         add(message);
@@ -51,7 +56,15 @@ public class ScorePanel extends JPanel {
         return playFrame;
     }
 
+    public JButton getNewMatch() {
+        return newMatch;
+    }
+
     public JLabel getMessage() {
         return message;
+    }
+
+    public JLabel getServerIcon() {
+        return serverIcon;
     }
 }

@@ -16,8 +16,7 @@ public class Player implements PositionConstants {
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
         x = -100;  // So not seen at the start
         y = -100;
-        gamePoint = GamePoint.FORTY;
-        gamesWonInSet = 5;
+        gamePoint = GamePoint.LOVE;
         isServing = servingFirst;
         this.colour = colour;
         this.ball = ball;
@@ -145,6 +144,30 @@ public class Player implements PositionConstants {
         opponent.gamesWonInSet = 0;
     }
 
+    public void resetMatch() {
+        gamePoint = GamePoint.LOVE;
+        opponent.gamePoint = GamePoint.LOVE;
+        pointsWonInTiebreak = 0;
+        opponent.pointsWonInTiebreak = 0;
+        gamesWonInSet = 0;
+        opponent.gamesWonInSet = 0;
+        setsWonInMatch = 0;
+        opponent.setsWonInMatch = 0;
+
+        if (random.nextBoolean()) {
+            isServing = true;
+            opponent.isServing = false;
+        }
+        else {
+            isServing = false;
+            opponent.isServing = true;
+        }
+
+        if (random.nextBoolean()) {
+            swapSides();
+        }
+    }
+
     public void endTiebreak() {
         pointsWonInTiebreak = 0;
         opponent.pointsWonInTiebreak = 0;
@@ -158,6 +181,10 @@ public class Player implements PositionConstants {
 
     public boolean getTurnToHitBall() {
         return turnToHitBall;
+    }
+
+    public boolean getIsServing() {
+        return isServing;
     }
 
     public void setPosition() {
@@ -403,20 +430,10 @@ public class Player implements PositionConstants {
     @Override
     public String toString() {
         if (isTiebreak) {
-            if (isServing) {
-                return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak + " O";
-            }
-            else {
-                return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak;
-            }
+            return setsWonInMatch + "-" + gamesWonInSet + "-" + pointsWonInTiebreak;
         }
         else {
-            if (isServing) {
-                return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString() + " O";
-            }
-            else {
-                return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString();
-            }
+            return setsWonInMatch + "-" + gamesWonInSet + "-" + gamePoint.toString();
         }
     }
 }
