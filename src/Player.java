@@ -67,24 +67,6 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void swapSides() {
-        switch (side) {
-            case EAST:
-                side = Side.WEST;
-                opponent.side = Side.EAST;
-                break;
-            case WEST:
-                side = Side.EAST;
-                opponent.side = Side.WEST;
-                break;
-        }
-    }
-
-    public void swapServe() {
-        isServing = !isServing;
-        opponent.isServing = !opponent.isServing;
-    }
-
     public void winPoint() {
         switch (gamePoint) {
             case LOVE:
@@ -131,6 +113,24 @@ public class Player implements PositionConstants {
         else if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 6 == 0) {
             swapSides();
         }
+    }
+
+    public void swapSides() {
+        switch (side) {
+            case EAST:
+                side = Side.WEST;
+                opponent.side = Side.EAST;
+                break;
+            case WEST:
+                side = Side.EAST;
+                opponent.side = Side.WEST;
+                break;
+        }
+    }
+
+    public void swapServe() {
+        isServing = !isServing;
+        opponent.isServing = !opponent.isServing;
     }
 
     public void resetPoints() {

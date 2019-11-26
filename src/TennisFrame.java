@@ -105,23 +105,15 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
                 Math.pow(playerB.getY() - ball.getY(), 2));
 
         if (playerADist < 20 && playerADist < playerBDist) {
-            if (isTiebreak) {
-                playerA.winTiebreakPoint();
-            } else {
-                if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
-                        ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerA.getTurnToHitBall()) {
-                    playerA.hitBall();
-                }
+            if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
+                    ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerA.getTurnToHitBall()) {
+                playerA.hitBall();
             }
-
-        } else if (playerBDist < 20 && playerBDist < playerADist) {
-            if (isTiebreak) {
-                playerB.winTiebreakPoint();
-            } else {
-                if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
-                        ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerB.getTurnToHitBall()) {
-                    playerB.hitBall();
-                }
+        }
+        else if (playerBDist < 20 && playerBDist < playerADist) {
+            if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
+                    ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerB.getTurnToHitBall()) {
+                playerB.hitBall();
             }
         }
 
