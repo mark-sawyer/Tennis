@@ -8,20 +8,31 @@ public class ScorePanel extends JPanel {
     private JButton playFrame;
     private JLabel scoreA;
     private JLabel scoreB;
+    private JLabel message;
 
     public ScorePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setLayout(new BorderLayout());
+        setLayout(new FlowLayout());
 
         play = new JButton("Play");
-        add(play, BorderLayout.SOUTH);
+        play.setPreferredSize(new Dimension(150, 100));
+        add(play);
         playFrame = new JButton("Frame");
-        add(playFrame, BorderLayout.NORTH);
+        playFrame.setPreferredSize(new Dimension(150, 50));
+        add(playFrame);
 
         scoreA = new JLabel();
-        add(scoreA, BorderLayout.WEST);
+        scoreA.setPreferredSize(new Dimension(80, 50));
+        scoreA.setFont(new Font("Arial", Font.BOLD, 16));
+        add(scoreA);
         scoreB = new JLabel();
-        add(scoreB, BorderLayout.EAST);
+        scoreB.setPreferredSize(new Dimension(80, 50));
+        scoreB.setFont(new Font("Arial", Font.BOLD, 16));
+        add(scoreB);
+        message = new JLabel();
+        message.setPreferredSize(new Dimension(150, 100));
+        message.setFont(new Font("Arial", Font.BOLD, 24));
+        add(message);
     }
 
     public JLabel getScoreA() {
@@ -38,5 +49,9 @@ public class ScorePanel extends JPanel {
 
     public JButton getPlayFrame() {
         return playFrame;
+    }
+
+    public JLabel getMessage() {
+        return message;
     }
 }

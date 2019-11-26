@@ -1,15 +1,12 @@
 import java.awt.*;
-import java.util.Random;
 
 public class Ball {
     private double x, y, height, heightVelocity, speed, xDir, yDir;
     private int bounceNum;
-    private final double velocityLostPerStep = 0.0045;
-    private Random random;
+    private final double VELOCITY_LOST_PER_STEP = 0.0045, BOUNCE_REDUCTION = 0.7;
     private Color colour, bounceColour;
 
     public Ball() {
-        random = new Random();
         colour = Color.GREEN;
         bounceColour = new Color(225, 128, 0);
     }
@@ -36,9 +33,9 @@ public class Ball {
         if (height < 0) {
             ++bounceNum;
             height = Math.abs(height);
-            heightVelocity = Math.abs(heightVelocity) * 0.8;
+            heightVelocity = Math.abs(heightVelocity) * BOUNCE_REDUCTION;
         }
-        heightVelocity -= velocityLostPerStep;
+        heightVelocity -= VELOCITY_LOST_PER_STEP;
     }
 
     public void setSpeed(double speed) {

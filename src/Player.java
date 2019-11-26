@@ -6,6 +6,7 @@ public class Player implements PositionConstants {
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
     private boolean isServing, isTiebreak, servedFirstInTiebreak, turnToHitBall, hasServed;
     private double x, y, speed, yGoal, xGoal;
+    private final double BOUNCE_REDUCTION = 0.7;
     private Player opponent;
     private Color colour;
     private Ball ball;
@@ -18,7 +19,7 @@ public class Player implements PositionConstants {
         this.colour = colour;
         this.ball = ball;
         this.side = side;
-        speed = 7;
+        speed = 1.5;
         random = new Random();
     }
 
@@ -153,10 +154,6 @@ public class Player implements PositionConstants {
         return isTiebreak;
     }
 
-    public boolean getIsServing() {
-        return isServing;
-    }
-
     public boolean getTurnToHitBall() {
         return turnToHitBall;
     }
@@ -235,7 +232,8 @@ public class Player implements PositionConstants {
         if (isServing) {
             turnToHitBall = true;
             hasServed = false;
-        } else {
+        }
+        else {
             turnToHitBall = false;
         }
     }
@@ -308,9 +306,6 @@ public class Player implements PositionConstants {
             }
         }
 
-
-        System.out.println("xTarget: " + xTarget + " yTarget: " + yTarget);
-
         double extraVelocity = -44.4444 * ball.getHeight() + 222.2222;
         if (extraVelocity < 1) {
             extraVelocity = 1;
@@ -329,7 +324,6 @@ public class Player implements PositionConstants {
         double stepsToGround = quadratic(-0.00225, heightVelocity, ball.getHeight());
 
         double ballSpeed = norm / stepsToGround;
-        System.out.println("ballSpeed: " + ballSpeed);
 
         ball.setSpeed(ballSpeed);
         ball.setDirection(xDir, yDir);
@@ -345,15 +339,11 @@ public class Player implements PositionConstants {
 
         // What will the maximum height be after the bounce?
         // Get the velocity when the ball hits the ground.
-        double bounceVelocity = -0.8 * (-0.0045 * stepsToGround + heightVelocity);
+        double bounceVelocity = -BOUNCE_REDUCTION * (-0.0045 * stepsToGround + heightVelocity);
         double stepsToMaxHeight = bounceVelocity / 0.0045;
-        System.out.println("Steps to max height: " + stepsToMaxHeight);
         double maxBounceHeight = -0.00225 * Math.pow(stepsToMaxHeight, 2) +
                 bounceVelocity * stepsToMaxHeight;
-        System.out.println("predicted max bounce height: " + maxBounceHeight);
         if (maxBounceHeight < 5) {
-            System.out.println("xDir: " + xDir);
-            System.out.println("yDir: " + yDir);
             opponent.xGoal = xTarget + xDir * ballSpeed * stepsToMaxHeight;
             opponent.yGoal = yTarget + yDir * ballSpeed * stepsToMaxHeight;
         }
@@ -398,6 +388,10 @@ public class Player implements PositionConstants {
 
     public double getY() {
         return y;
+    }
+
+    public Color getColour() {
+        return colour;
     }
 
     private double quadratic(double a, double b, double c) {
