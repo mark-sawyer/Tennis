@@ -14,6 +14,8 @@ public class Player implements PositionConstants {
     private Random random;
 
     public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
+        x = -100;  // So not seen at the start
+        y = -100;
         gamePoint = GamePoint.LOVE;
         isServing = servingFirst;
         this.colour = colour;

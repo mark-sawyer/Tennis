@@ -7,6 +7,8 @@ public class Ball {
     private Color colour, bounceColour;
 
     public Ball() {
+        x = -100;  // So not seen at the start
+        y = -100;
         colour = Color.GREEN;
         bounceColour = new Color(225, 128, 0);
     }
