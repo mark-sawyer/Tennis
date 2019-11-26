@@ -2,14 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CourtPanel extends JPanel {
-    private final int WIDTH = 900;
-    private final int HEIGHT = 500;
     private ImageIcon background;
     private Player playerA;
     private Player playerB;
     private Ball ball;
 
-    public CourtPanel(Player playerA, Player playerB, Ball ball) {
+    CourtPanel(Player playerA, Player playerB, Ball ball) {
+        int HEIGHT = 500;
+        int WIDTH = 900;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.playerA = playerA;
         this.playerB = playerB;

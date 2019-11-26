@@ -11,10 +11,8 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
     private ScorePanel scorePanel;
     private CourtPanel courtPanel;
     private Timer timer, pointDelayTimer;
-    private final double MAX_HITTABLE_BALL_HEIGHT = 5;
-    private final double MIN_HITTABLE_BALL_HEIGHT = 0.5;
 
-    public TennisFrame(String s) {
+    TennisFrame(String s) {
         super(s);
 
         scorePanel = new ScorePanel();
@@ -55,12 +53,12 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         setVisible(true);
     }
 
-    public void match() {
-        if (playerA.getSetsWonInMatch() == 3) {
+    private void match() {
+        if (playerA.getSetsWonInMatch() == SETS_IN_MATCH / 2 + 1) {
             scorePanel.getMessage().setForeground(playerA.getColour());
             scorePanel.getMessage().setText("RED WINS");
         }
-        else if (playerB.getSetsWonInMatch() == 3) {
+        else if (playerB.getSetsWonInMatch() == SETS_IN_MATCH / 2 + 1) {
             scorePanel.getMessage().setForeground(playerB.getColour());
             scorePanel.getMessage().setText("BLUE WINS");
         }
@@ -118,6 +116,8 @@ public class TennisFrame extends JFrame implements ActionListener, PositionConst
         double playerBDist = Math.sqrt(Math.pow(playerB.getX() - ball.getX(), 2) +
                 Math.pow(playerB.getY() - ball.getY(), 2));
 
+        double MIN_HITTABLE_BALL_HEIGHT = 0.5;
+        double MAX_HITTABLE_BALL_HEIGHT = 5;
         if (playerADist < 20 && playerADist < playerBDist) {
             if (ball.getHeight() < MAX_HITTABLE_BALL_HEIGHT &&
                     ball.getHeight() > MIN_HITTABLE_BALL_HEIGHT && playerA.getTurnToHitBall()) {

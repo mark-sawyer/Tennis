@@ -1,4 +1,6 @@
 public interface PositionConstants {
+    int SETS_IN_MATCH = 5;
+
     int EAST_SERVE_DEUCE_X = 722;
     int EAST_SERVE_DEUCE_Y = 119;
     int EAST_SERVE_AD_X = 722;

@@ -1,14 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.zip.DeflaterInputStream;
 
-public class ScorePanel extends JPanel {
-    private final int WIDTH = 200;
-    private final int HEIGHT = 500;
+class ScorePanel extends JPanel {
     private JButton play, playFrame, newMatch;
     private JLabel scoreA, scoreB, serverIcon, message;
 
-    public ScorePanel() {
+    ScorePanel() {
+        int HEIGHT = 500;
+        int WIDTH = 200;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new FlowLayout());
 
@@ -40,31 +39,31 @@ public class ScorePanel extends JPanel {
         add(message);
     }
 
-    public JLabel getScoreA() {
+    JLabel getScoreA() {
         return scoreA;
     }
 
-    public JLabel getScoreB() {
+    JLabel getScoreB() {
         return scoreB;
     }
 
-    public JButton getPlay() {
+    JButton getPlay() {
         return play;
     }
 
-    public JButton getPlayFrame() {
+    JButton getPlayFrame() {
         return playFrame;
     }
 
-    public JButton getNewMatch() {
+    JButton getNewMatch() {
         return newMatch;
     }
 
-    public JLabel getMessage() {
+    JLabel getMessage() {
         return message;
     }
 
-    public JLabel getServerIcon() {
+    JLabel getServerIcon() {
         return serverIcon;
     }
 }

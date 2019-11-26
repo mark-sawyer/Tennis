@@ -6,14 +6,13 @@ public class Player implements PositionConstants {
     private int gamesWonInSet, setsWonInMatch, pointsWonInTiebreak;
     private boolean isServing, isTiebreak, servedFirstInTiebreak, turnToHitBall, hasServed;
     private double x, y, speed, yGoal, xGoal;
-    private final double BOUNCE_REDUCTION = 0.7;
     private Player opponent;
     private Color colour;
     private Ball ball;
     private Side side;
     private Random random;
 
-    public Player(boolean servingFirst, Color colour, Ball ball, Side side) {
+    Player(boolean servingFirst, Color colour, Ball ball, Side side) {
         x = -100;  // So not seen at the start
         y = -100;
         gamePoint = GamePoint.LOVE;
@@ -25,26 +24,26 @@ public class Player implements PositionConstants {
         random = new Random();
     }
 
-    public void setOpponent(Player opponent) {
+    void setOpponent(Player opponent) {
         this.opponent = opponent;
     }
 
-    public int getSetsWonInMatch() {
+    int getSetsWonInMatch() {
         return setsWonInMatch;
     }
 
-    public GamePoint getPointsWonInGame() {
+    private GamePoint getPointsWonInGame() {
         return gamePoint;
     }
 
-    public void winSet() {
+    private void winSet() {
         ++setsWonInMatch;
         resetPoints();
         resetGames();
         swapSides();
     }
 
-    public void winGame() {
+    private void winGame() {
         ++gamesWonInSet;
         resetPoints();
         swapServe();
@@ -53,7 +52,7 @@ public class Player implements PositionConstants {
             winSet();
         }
         else if (gamesWonInSet == 6 && opponent.gamesWonInSet == 6 &&
-                setsWonInMatch + opponent.setsWonInMatch < 4) {
+                setsWonInMatch + opponent.setsWonInMatch < SETS_IN_MATCH - 1) {
             isTiebreak = true;
             opponent.isTiebreak = true;
             if (isServing) {
@@ -69,7 +68,7 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void winPoint() {
+    void winPoint() {
         switch (gamePoint) {
             case LOVE:
                 gamePoint = GamePoint.FIFTEEN;
@@ -99,7 +98,7 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void winTiebreakPoint() {
+    void winTiebreakPoint() {
         ++pointsWonInTiebreak;
         if (pointsWonInTiebreak >= 7 && opponent.pointsWonInTiebreak <= pointsWonInTiebreak - 2) {
             winSet();
@@ -116,7 +115,7 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void swapSides() {
+    private void swapSides() {
         switch (side) {
             case EAST:
                 side = Side.WEST;
@@ -129,22 +128,22 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void swapServe() {
+    private void swapServe() {
         isServing = !isServing;
         opponent.isServing = !opponent.isServing;
     }
 
-    public void resetPoints() {
+    private void resetPoints() {
         gamePoint = GamePoint.LOVE;
         opponent.gamePoint = GamePoint.LOVE;
     }
 
-    public void resetGames() {
+    private void resetGames() {
         gamesWonInSet = 0;
         opponent.gamesWonInSet = 0;
     }
 
-    public void resetMatch() {
+    void resetMatch() {
         gamePoint = GamePoint.LOVE;
         opponent.gamePoint = GamePoint.LOVE;
         pointsWonInTiebreak = 0;
@@ -168,26 +167,26 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void endTiebreak() {
+    private void endTiebreak() {
         pointsWonInTiebreak = 0;
         opponent.pointsWonInTiebreak = 0;
         isTiebreak = false;
         opponent.isTiebreak = false;
     }
 
-    public boolean getIsTiebreak() {
+    boolean getIsTiebreak() {
         return isTiebreak;
     }
 
-    public boolean getTurnToHitBall() {
+    boolean getTurnToHitBall() {
         return turnToHitBall;
     }
 
-    public boolean getIsServing() {
+    boolean getIsServing() {
         return isServing;
     }
 
-    public void setPosition() {
+    void setPosition() {
         boolean isDeuceSide = getIsDeuce();
 
         if (side == Side.EAST) {
@@ -270,25 +269,15 @@ public class Player implements PositionConstants {
     private boolean getIsDeuce() {
         boolean isDeuceSide;
         if (isTiebreak) {
-            if ((pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0) {
-                isDeuceSide = true;
-            }
-            else {
-                isDeuceSide = false;
-            }
+            isDeuceSide = (pointsWonInTiebreak + opponent.pointsWonInTiebreak) % 2 == 0;
         }
         else {
-            if ((GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0) {
-                isDeuceSide = true;
-            }
-            else {
-                isDeuceSide = false;
-            }
+            isDeuceSide = (GamePoint.toInt(gamePoint) + GamePoint.toInt(opponent.gamePoint)) % 2 == 0;
         }
         return isDeuceSide;
     }
 
-    public void hitBall() {
+    void hitBall() {
         turnToHitBall = false;
         opponent.turnToHitBall = true;
 
@@ -368,6 +357,7 @@ public class Player implements PositionConstants {
 
         // What will the maximum height be after the bounce?
         // Get the velocity when the ball hits the ground.
+        double BOUNCE_REDUCTION = 0.7;
         double bounceVelocity = -BOUNCE_REDUCTION * (-0.0045 * stepsToGround + heightVelocity);
         double stepsToMaxHeight = bounceVelocity / 0.0045;
         double maxBounceHeight = -0.00225 * Math.pow(stepsToMaxHeight, 2) +
@@ -383,14 +373,14 @@ public class Player implements PositionConstants {
         }
     }
 
-    public void draw(Graphics g) {
+    void draw(Graphics g) {
         g.setColor(colour);
         int xPos = (int) Math.rint(x);
         int yPos = (int) Math.rint(y);
         g.fillOval(xPos - 15, yPos - 15, 30, 30);
     }
 
-    public void moveToLocation() {
+    void moveToLocation() {
         double xDist = xGoal - x;
         double yDist = yGoal - y;
         double norm = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
@@ -411,15 +401,15 @@ public class Player implements PositionConstants {
         y += ySpeed;
     }
 
-    public double getX() {
+    double getX() {
         return x;
     }
 
-    public double getY() {
+    double getY() {
         return y;
     }
 
-    public Color getColour() {
+    Color getColour() {
         return colour;
     }
 
